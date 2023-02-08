@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:transport_app/colors.dart';
 import 'package:transport_app/invoiceModule/create_new_invoice.dart';
 
@@ -28,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {}, icon: const Icon(Icons.notifications_active))
         ],
       ),
-      drawer: Drawer(),
+      drawer: const Drawer(),
       body: Column(children: [
         Container(
           height: dH * 0.3,
@@ -109,10 +108,16 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: dH * 0.02,
               ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [HomeOptions(), HomeOptions()],
-              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  HomeOptions(
+                    title: 'Rides',
+                    function: () {},
+                    icon: Icons.airport_shuttle_outlined,
+                  )
+                ],
+              ),
             ],
           ),
         )

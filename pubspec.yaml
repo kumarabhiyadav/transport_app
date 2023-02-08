@@ -37,6 +37,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   intl: ^0.18.0
+  flutter_html_to_pdf: ^0.7.0
+  path_provider: ^2.0.12
+  open_file: ^3.2.1 
+
+
  
 
 dev_dependencies:
