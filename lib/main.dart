@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:transport_app/bottom_nav_bar.dart';
+import 'package:transport_app/homeModule/home_screen.dart';
 
 void main(List<String> args) {
   runApp(const MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'transport',
-      home: BottomNavBar(),
+      home: HomeScreen(),
     );
   }
 }
