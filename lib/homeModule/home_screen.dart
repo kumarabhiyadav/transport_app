@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:transport_app/colors.dart';
 import 'package:transport_app/invoiceModule/create_new_invoice.dart';
+import 'package:transport_app/rideModule/screens/rides_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -113,7 +114,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   HomeOptions(
                     title: 'Rides',
-                    function: () {},
+                    function: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RideScreen())),
                     icon: Icons.airport_shuttle_outlined,
                   )
                 ],
@@ -139,7 +143,6 @@ class HomeOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dW = MediaQuery.of(context).size.width;
-    final dH = MediaQuery.of(context).size.height;
     final tS = MediaQuery.of(context).textScaleFactor;
     return GestureDetector(
       onTap: () => function(),

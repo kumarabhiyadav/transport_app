@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:transport_app/rideModule/model/ride_model.dart';
 
-import '../colors.dart';
-import '../common_widgets.dart';
+import '../../colors.dart';
+import '../../common_widgets.dart';
 
 class AddNewRideScreen extends StatefulWidget {
   const AddNewRideScreen({super.key});
@@ -31,15 +31,16 @@ class _AddNewRideScreenState extends State<AddNewRideScreen> {
       return;
     } else {
       Ride ride = Ride(
-          date: date!,
-          detention: detentionController.text == ""
-              ? 0.0
-              : double.parse(detentionController.text),
-          lrNo: lrNoController.text,
-          particular: particularController.text,
-          quantity: double.parse(quantityController.text),
-          rate: double.parse(rateController.text),
-          truckNumber: truckNumberController.text);
+        date: date!,
+        detention: detentionController.text == ""
+            ? 0.0
+            : double.parse(detentionController.text),
+        lrNo: lrNoController.text,
+        particular: particularController.text,
+        quantity: double.parse(quantityController.text),
+        rate: double.parse(rateController.text),
+        truckNumber: truckNumberController.text,
+      );
 
       rides.add(ride);
 
@@ -80,7 +81,6 @@ class _AddNewRideScreenState extends State<AddNewRideScreen> {
   @override
   Widget build(BuildContext context) {
     final dW = MediaQuery.of(context).size.width;
-    final dH = MediaQuery.of(context).size.height;
     final tS = MediaQuery.of(context).textScaleFactor;
     return Scaffold(
       appBar: AppBar(

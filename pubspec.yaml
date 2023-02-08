@@ -40,6 +40,10 @@ dependencies:
   flutter_html_to_pdf: ^0.7.0
   path_provider: ^2.0.12
   open_file: ^3.2.1 
+  provider: ^6.0.5
+  http: ^0.13.5
+  fluttertoast: ^8.1.2
+  flutter_spinkit: ^5.1.0
 
 
  
