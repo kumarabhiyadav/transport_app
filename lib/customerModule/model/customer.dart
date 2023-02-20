@@ -1,20 +1,23 @@
 class Customer {
   final String id;
-  final String title;
   final String customerName;
   final String companyName;
   final String phone;
   final String email;
-  final List<ContactPerson> contactPerson;
 
-  Customer(
-      {required this.id,
-      required this.companyName,
-      required this.customerName,
-      required this.email,
-      required this.phone,
-      required this.title,
-      required this.contactPerson});
+  Customer({
+    required this.id,
+    required this.companyName,
+    required this.customerName,
+    required this.email,
+    required this.phone,
+  });
+
+  static jsonToRide(value) => Customer(
+        id: value['_id'],
+        customerName: value['customerName'],
+        companyName: value["companyName"],
+        email: value["email"],
+        phone: value["phone"],
+      );
 }
-
-class ContactPerson {}

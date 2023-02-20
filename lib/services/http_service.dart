@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class HttpService {
   static postRequest(
-      {required String url, required Map<String, String> body}) async {
+      {required String url, required Map<String, dynamic> body}) async {
     const Map<String, String> headers = {"Content-Type": "application/json"};
 
     try {

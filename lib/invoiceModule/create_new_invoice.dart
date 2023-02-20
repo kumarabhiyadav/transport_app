@@ -297,7 +297,9 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                const AddNewRideScreen(),
+                                                const AddNewRideScreen(
+                                              from: 'invoice',
+                                            ),
                                           )).then((value) {
                                         if (value != null) {
                                           setState(() {
