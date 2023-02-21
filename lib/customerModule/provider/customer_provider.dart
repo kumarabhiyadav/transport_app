@@ -12,7 +12,7 @@ class CustomerProvider with ChangeNotifier {
         url: domain + endPoints['createCustomer']!, body: body);
 
     if (response['success']) {
-      customers.add(Customer.jsonToRide(response['result']));
+      customers.add(Customer.jsonToCustomer(response['result']));
       notifyListeners();
       return response['result'];
     } else {

@@ -48,7 +48,8 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
     if (notValidate()) {
       return;
     } else {
-      generatePDF();
+      // generatePDF();
+
     }
   }
 
@@ -56,7 +57,6 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
     if (notValidate()) {
       return;
     } else {
-      // save();
       generatePDF();
     }
   }
@@ -64,12 +64,11 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
   generatePDF() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     final targetPath = appDocDir.path;
-    const targetFileName = "example-pdf";
 
     final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
-        htmlContent, targetPath, targetFileName);
+        htmlContent, targetPath, invoiceNumberController.text);
 
-    // print(generatedPdfFile.path);
+    print(generatedPdfFile.path);
 
     try {
       await OpenFile.open(generatedPdfFile.path);
@@ -286,54 +285,58 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(2))),
                           onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) => Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ListTile(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const AddNewRideScreen(
-                                              from: 'invoice',
-                                            ),
-                                          )).then((value) {
-                                        if (value != null) {
-                                          setState(() {
-                                            rides.addAll(value);
-                                          });
-                                        }
-                                        Navigator.pop(context);
-                                      });
-                                    },
-                                    leading: const Icon(
-                                      Icons.add,
-                                      color: primaryColor,
+                            if (!_formKey.currentState!.validate()) {
+                              return;
+                            } else {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) => Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddNewRideScreen(
+                                                from: 'invoice',
+                                                sourceAndDestination: {
+                                                  'source': fromController.text,
+                                                  'destination':
+                                                      toController.text
+                                                },
+                                              ),
+                                            )).then((value) {
+                                          if (value != null) {
+                                            setState(() {
+                                              rides.addAll(value);
+                                            });
+                                          }
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      leading: const Icon(
+                                        Icons.add,
+                                        color: primaryColor,
+                                      ),
+                                      title: const Text('Create New Ride'),
+                                      minLeadingWidth: 10,
                                     ),
-                                    title: const Text('Create New Ride'),
-                                    minLeadingWidth: 10,
-                                  ),
-                                  ListTile(
-                                    onTap: () {},
-                                    leading: const Icon(
-                                      Icons.person,
-                                      color: primaryColor,
+                                    ListTile(
+                                      onTap: () {},
+                                      leading: const Icon(
+                                        Icons.person,
+                                        color: primaryColor,
+                                      ),
+                                      title: const Text(
+                                          'Select from Customers Ride'),
+                                      minLeadingWidth: 10,
                                     ),
-                                    title: const Text(
-                                        'Select from Customers Ride'),
-                                    minLeadingWidth: 10,
-                                  ),
-                                ],
-                              ),
-                            );
-
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => AddNewRideScreen()));
+                                  ],
+                                ),
+                              );
+                            }
                           },
                           icon: const CircleAvatar(
                             backgroundColor: primaryColor,

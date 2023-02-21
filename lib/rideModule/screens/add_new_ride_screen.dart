@@ -12,7 +12,9 @@ import '../../common_widgets.dart';
 
 class AddNewRideScreen extends StatefulWidget {
   final String from;
-  const AddNewRideScreen({super.key, required this.from});
+  final Map<String, String>? sourceAndDestination;
+  const AddNewRideScreen(
+      {super.key, required this.from, this.sourceAndDestination});
 
   @override
   State<AddNewRideScreen> createState() => _AddNewRideScreenState();
@@ -52,16 +54,27 @@ class _AddNewRideScreenState extends State<AddNewRideScreen> {
           quantity: double.parse(quantityController.text),
           rate: double.parse(rateController.text),
           truckNumber: truckNumberController.text,
-          source: sourceController.text,
-          destination: destinationController.text);
+          source: widget.sourceAndDestination != null
+              ? widget.sourceAndDestination!['source']
+              : sourceController.text,
+          destination: widget.sourceAndDestination != null
+              ? widget.sourceAndDestination!['destination']
+              : destinationController.text);
 
-      final result = await Provider.of<RideProvider>(context, listen: false)
-          .createRide(ride);
+      // This block is for avoid entering data to db when new rides are create from create invoice page
+      if (widget.sourceAndDestination == null) {
+        final result = await Provider.of<RideProvider>(context, listen: false)
+            .createRide(ride);
 
-      if (result) {
-        Navigator.pop(context, rides);
+        if (result) {
+          rides.add(ride);
+          Navigator.pop(context, rides);
+        } else {
+          print("Error");
+        }
       } else {
-        print("Error");
+        Navigator.pop(context, rides);
+        // Reverse Condition
       }
     }
   }

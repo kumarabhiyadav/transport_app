@@ -13,7 +13,7 @@ class Customer {
     required this.phone,
   });
 
-  static jsonToRide(value) => Customer(
+  static jsonToCustomer(value) => Customer(
         id: value['_id'],
         customerName: value['customerName'],
         companyName: value["companyName"],
