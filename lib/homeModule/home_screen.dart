@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:transport_app/colors.dart';
+import 'package:transport_app/customerModule/screens/customer_screen.dart';
 import 'package:transport_app/invoiceModule/create_new_invoice.dart';
 import 'package:transport_app/rideModule/screens/rides_screen.dart';
 
@@ -92,7 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   HomeOptions(
-                    function: () {},
+                    function: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CustomerScreen())),
                     icon: Icons.person_outline,
                     title: 'Add Customer',
                   ),

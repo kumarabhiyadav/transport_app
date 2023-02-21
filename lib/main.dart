@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:transport_app/customerModule/provider/customer_provider.dart';
 import 'package:transport_app/homeModule/home_screen.dart';
 import 'package:transport_app/rideModule/provider/ride_provider.dart';
 
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RideProvider()),
+        ChangeNotifierProvider(create: (_) => CustomerProvider()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
