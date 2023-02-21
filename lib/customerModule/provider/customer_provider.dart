@@ -28,7 +28,7 @@ class CustomerProvider with ChangeNotifier {
     if (response['success']) {
       // customers.add(Customer.jsonToRide(response['result']));
       response['result']
-          .forEach((value) => customers.add(Customer.jsonToRide(value)));
+          .forEach((value) => customers.add(Customer.jsonToCustomer(value)));
       notifyListeners();
       return response['result'];
     } else {

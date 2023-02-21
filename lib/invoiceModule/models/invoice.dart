@@ -21,6 +21,13 @@ class Invoice {
       required this.rides,
       required this.source});
 
-
-      static jsonToInvoice(value) => Invoice(advance: value['advance'], customer: Customer.jsonToCustomer(value['customer']), date: DateTime.parse(value['date']), destination: value['destination'], id: value['_id'], invoiceNo: value['invoiceNo'], rides: value['rides'].map((value)), source: source)
+  static jsonToInvoice(value) => Invoice(
+      advance: value['advance'],
+      customer: Customer.jsonToCustomer(value['customer']),
+      date: DateTime.parse(value['date']),
+      destination: value['destination'],
+      id: value['_id'],
+      invoiceNo: value['invoiceNo'],
+      rides: value['rides'].map((ride) => Ride.jsonToRide(ride)),
+      source: value['source']);
 }
