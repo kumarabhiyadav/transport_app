@@ -73,6 +73,7 @@ class _AddNewRideScreenState extends State<AddNewRideScreen> {
           print("Error");
         }
       } else {
+        rides.add(ride);
         Navigator.pop(context, rides);
         // Reverse Condition
       }

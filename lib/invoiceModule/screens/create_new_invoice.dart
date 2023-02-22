@@ -5,14 +5,17 @@ import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'package:transport_app/common_widgets.dart';
 import 'package:transport_app/customerModule/model/customer.dart';
+import 'package:transport_app/invoiceModule/models/invoice.dart';
+import 'package:transport_app/invoiceModule/provider/invoice_provider.dart';
 import 'package:transport_app/invoiceModule/templates/vishal_template.dart';
 import 'package:transport_app/rideModule/screens/add_new_ride_screen.dart';
 import 'package:transport_app/rideModule/model/ride_model.dart';
 
-import '../colors.dart';
+import '../../colors.dart';
 
 class CreateNewInvoice extends StatefulWidget {
   const CreateNewInvoice({super.key});
@@ -30,7 +33,12 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
   TextEditingController toController = TextEditingController();
   TextEditingController advanceController = TextEditingController();
   DateTime? date;
-  Customer? customer;
+  Customer? customer = Customer(
+      id: '',
+      companyName: "companyName",
+      customerName: "customerName",
+      email: "email",
+      phone: "phone");
 
   List<Ride> rides = [];
 
@@ -44,8 +52,19 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
 
   notValidate() => !_formKey.currentState!.validate();
 
-  save() {
+  save() async {
     if (notValidate()) {
+      final Invoice currentInvoice = Invoice(
+          advance: double.parse(advanceController.text),
+          customer: customer!,
+          date: date!,
+          destination: toController.text,
+          id: '',
+          invoiceNo: '',
+          rides: rides,
+          source: fromController.text);
+      await Provider.of<InvoiceProvider>(context, listen: false)
+          .createInvoice(currentInvoice);
       return;
     } else {
       // generatePDF();

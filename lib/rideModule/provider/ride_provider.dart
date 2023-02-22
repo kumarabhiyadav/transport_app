@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:transport_app/api.dart';
+import 'package:transport_app/common_functions.dart';
 import 'package:transport_app/rideModule/model/ride_model.dart';
 import 'package:transport_app/services/http_service.dart';
 
@@ -43,6 +44,19 @@ class RideProvider with ChangeNotifier {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  deleteRide(String rideId) async {
+    final response = await HttpService.postRequest(
+        url: domain + endPoints['deleteRide']!, body: {'rideId': rideId});
+    if (response['success']) {
+      rides.removeWhere((ride) => ride.id == rideId);
+      notifyListeners();
+      return true;
+    } else {
+      // toastMessage(response['message']);
+      return false;
     }
   }
 }

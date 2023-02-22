@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:transport_app/colors.dart';
 import 'package:transport_app/customerModule/screens/customer_screen.dart';
-import 'package:transport_app/invoiceModule/create_new_invoice.dart';
+import 'package:transport_app/invoiceModule/screens/invoice_screen.dart';
 import 'package:transport_app/rideModule/screens/rides_screen.dart';
+
+import '../invoiceModule/screens/create_new_invoice.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -96,17 +98,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     function: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CustomerScreen())),
-                    icon: Icons.person_outline,
-                    title: 'Add Customer',
+                            builder: (context) => const CreateNewInvoice())),
+                    icon: Icons.receipt_long,
+                    title: 'Create Invoice',
                   ),
                   HomeOptions(
                     function: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CreateNewInvoice())),
-                    icon: Icons.receipt_long,
-                    title: 'Create Invoice',
+                            builder: (context) => const InvoiceScreen())),
+                    icon: Icons.receipt,
+                    title: 'Invoices',
                   ),
                 ],
               ),
@@ -123,7 +125,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         MaterialPageRoute(
                             builder: (context) => const RideScreen())),
                     icon: Icons.airport_shuttle_outlined,
-                  )
+                  ),
+                  HomeOptions(
+                    function: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CustomerScreen())),
+                    icon: Icons.person_outline,
+                    title: 'Add Customer',
+                  ),
                 ],
               ),
             ],
