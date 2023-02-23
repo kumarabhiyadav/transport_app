@@ -21,6 +21,7 @@ class AddNewRideScreen extends StatefulWidget {
 }
 
 class _AddNewRideScreenState extends State<AddNewRideScreen> {
+  bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   TextEditingController customerController = TextEditingController();
 
@@ -42,6 +43,9 @@ class _AddNewRideScreenState extends State<AddNewRideScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     } else {
+      setState(() {
+        isLoading = true;
+      });
       Ride ride = Ride(
           id: '',
           customer: customerController.text,
@@ -72,6 +76,9 @@ class _AddNewRideScreenState extends State<AddNewRideScreen> {
         } else {
           print("Error");
         }
+        setState(() {
+          isLoading = false;
+        });
       } else {
         rides.add(ride);
         Navigator.pop(context, rides);
@@ -478,9 +485,7 @@ class _AddNewRideScreenState extends State<AddNewRideScreen> {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    onPressed: () {
-                      save();
-                    },
+                    onPressed: () => isLoading ? null : save(),
                     child: Text(
                       'Save',
                       style: TextStyle(
