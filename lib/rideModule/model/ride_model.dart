@@ -42,4 +42,20 @@ class Ride {
       updatedAt: DateTime.parse(value['updatedAt']),
       source: value['source'],
       destination: value['destination']);
+
+  static Map<String, dynamic> rideToJson(Ride ride) => {
+        "id": ride.id,
+        "customer": ride.customer,
+        "date": ride.date.toIso8601String(),
+        "detention": ride.detention,
+        "lrNo": ride.lrNo,
+        "particular": ride.particular,
+        "quantity": ride.quantity,
+        "rate": ride.rate,
+        "truckNumber": ride.truckNumber,
+        "createdAt": ride.createdAt,
+        "updatedAt": ride.updatedAt,
+        "source": ride.source,
+        "destination": ride.destination
+      };
 }

@@ -14,5 +14,5 @@ const endPoints = {
   'fetchCustomers': '/api/customer/fetchCustomers',
 
   //Invocie
-  'createInvoice': '/api/customer/createInvoice'
+  'createInvoice': '/api/invoice/createInvoice'
 };

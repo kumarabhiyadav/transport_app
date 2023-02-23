@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transport_app/customerModule/provider/customer_provider.dart';
 import 'package:transport_app/homeModule/home_screen.dart';
+import 'package:transport_app/invoiceModule/provider/invoice_provider.dart';
 import 'package:transport_app/rideModule/provider/ride_provider.dart';
 
 void main(List<String> args) {
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => RideProvider()),
         ChangeNotifierProvider(create: (_) => CustomerProvider()),
+        ChangeNotifierProvider(create: (_) => InvoiceProvider()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -7,15 +7,15 @@ class HttpService {
       {required String url, required Map<String, dynamic> body}) async {
     const Map<String, String> headers = {"Content-Type": "application/json"};
 
-    try {
-      final response = await http.post(Uri.parse(url),
-          headers: headers, body: json.encode(body));
+    // try {
+    final response = await http.post(Uri.parse(url),
+        headers: headers, body: json.encode(body));
 
-      final responseData = json.decode(response.body);
+    final responseData = json.decode(response.body);
 
-      return responseData;
-    } catch (e) {
-      rethrow;
-    }
+    return responseData;
+    // } catch (e) {
+    //   rethrow;
+    // }
   }
 }
