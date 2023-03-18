@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:transport_app/invoiceModule/models/invoice.dart';
 import 'package:transport_app/rideModule/model/ride_model.dart';
 import 'package:transport_app/services/http_service.dart';
@@ -9,6 +8,12 @@ import 'package:transport_app/services/http_service.dart';
 import '../../api.dart';
 
 class InvoiceProvider with ChangeNotifier {
+  final List<Invoice> _invoices = [];
+
+  List<Invoice> get invoices {
+    return [..._invoices];
+  }
+
   createInvoice(Invoice invoice) async {
     final response = await HttpService.postRequest(
         url: domain + endPoints['createInvoice']!,
@@ -23,6 +28,21 @@ class InvoiceProvider with ChangeNotifier {
               jsonEncode(invoice.rides.map((e) => Ride.rideToJson(e)).toList()),
         });
 
-    print(response);
+    // print(response);
+  }
+
+  fetchInvoices() async {
+    try {
+      final response = await HttpService.postRequest(
+          url: domain + endPoints['fetchInvoices']!, body: {});
+
+      if (response['success']) {
+        response['result']
+            .forEach((res) => _invoices.add(Invoice.jsonToInvoice(res)));
+        notifyListeners();
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }

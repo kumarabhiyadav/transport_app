@@ -1,0 +1,493 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:intl/intl.dart';
+import 'package:transport_app/invoiceModule/models/invoice.dart';
+
+import '../../colors.dart';
+
+class InvoiceCard extends StatefulWidget {
+  final Invoice invoice;
+  const InvoiceCard({super.key, required this.invoice});
+
+  @override
+  State<InvoiceCard> createState() => _InvoiceCardState();
+}
+
+class _InvoiceCardState extends State<InvoiceCard> {
+  bool showRides = false;
+  @override
+  Widget build(BuildContext context) {
+    final dW = MediaQuery.of(context).size.width;
+    final tS = MediaQuery.of(context).textScaleFactor;
+    return Card(
+      elevation: 1,
+      child: Padding(
+        padding: EdgeInsets.all(dW * 0.025),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "INVOICE :#${widget.invoice.invoiceNo}",
+                  style: TextStyle(
+                      fontSize: tS * 14,
+                      color: blueColor,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: .10),
+                ),
+                PopupMenuButton(
+                    onSelected: ((value) {
+                      switch (value) {
+                        case 1:
+                          //Delete
+                          break;
+
+                        case 2:
+                          //hide
+                          break;
+
+                        case 3:
+                          //view
+                          break;
+
+                        case 4:
+                          //Share
+                          break;
+                      }
+                    }),
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 1,
+                            child: TextButton.icon(
+                              onPressed: null,
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                              label: const Text(
+                                'Delete',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: 2,
+                            child: TextButton.icon(
+                              onPressed: null,
+                              icon: const Icon(
+                                Icons.archive,
+                                color: Colors.grey,
+                              ),
+                              label: const Text(
+                                'Archive',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: 3,
+                            child: TextButton.icon(
+                              onPressed: null,
+                              icon: const Icon(
+                                Icons.picture_as_pdf_rounded,
+                                color: Colors.grey,
+                              ),
+                              label: const Text(
+                                'View PDF',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: 3,
+                            child: TextButton.icon(
+                              onPressed: null,
+                              icon: const Icon(
+                                Icons.share_rounded,
+                                color: Colors.blue,
+                              ),
+                              label: const Text(
+                                'Share',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                            ),
+                          ),
+                        ]),
+              ],
+            ),
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Source",
+                  style: TextStyle(
+                      fontSize: tS * 16,
+                      color: blueColor,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: .10),
+                ),
+                Text(
+                  "Destination",
+                  style: TextStyle(
+                      fontSize: tS * 16,
+                      color: blueColor,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: .10),
+                ),
+              ],
+            ),
+            const Divider(
+              color: Colors.transparent,
+              height: 2,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.invoice.source,
+                  style: TextStyle(
+                      fontSize: tS * 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: .56),
+                ),
+                Text(
+                  widget.invoice.destination,
+                  style: TextStyle(
+                      fontSize: tS * 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: .56),
+                ),
+              ],
+            ),
+            const Divider(),
+            Text(
+              "Company Name",
+              style: TextStyle(
+                  fontSize: tS * 16,
+                  color: blueColor,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: .10),
+            ),
+            const Divider(
+              color: Colors.transparent,
+              height: 2,
+            ),
+            Text(
+              widget.invoice.customer.companyName.toUpperCase(),
+              style: TextStyle(
+                  fontSize: tS * 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: .56),
+            ),
+            const Divider(),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  showRides = !showRides;
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Rides',
+                        style: TextStyle(
+                            fontSize: tS * 16,
+                            color: blueColor,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: .10),
+                      ),
+                    ],
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        showRides = !showRides;
+                      });
+                    },
+                    icon: Transform.rotate(
+                      angle: showRides ? pi : pi * 2,
+                      child: const Icon(
+                        Icons.arrow_downward_rounded,
+                        color: blueColor,
+                      ),
+                    ),
+                    label: Text(
+                      widget.invoice.rides.length.toString(),
+                      style: TextStyle(
+                        fontSize: tS * 16,
+                        color: blueColor,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: .10,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ...widget.invoice.rides
+                    .map(
+                      (ride) => AnimatedContainer(
+                        curve: Curves.fastOutSlowIn,
+                        duration: const Duration(milliseconds: 300),
+                        height: showRides ? (dW * .45) : 0.0,
+                        child: SingleChildScrollView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: SizedBox(
+                            height: dW * .45,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Text(
+                                      "Truck Number",
+                                      style: TextStyle(
+                                          color: greyColor,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      "Date",
+                                      style: TextStyle(
+                                          color: greyColor,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      ride.truckNumber,
+                                      style: TextStyle(
+                                          color: blueColor,
+                                          fontSize: tS * 15,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: .56),
+                                    ),
+                                    Text(
+                                      DateFormat('dd MMM yyyy')
+                                          .format(ride.date.toLocal()),
+                                      style: TextStyle(
+                                          color: blueColor,
+                                          fontSize: tS * 15,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: .56),
+                                    ),
+                                  ],
+                                ),
+                                const Divider(
+                                  color: Colors.transparent,
+                                  height: 6,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Text(
+                                      "LR No.",
+                                      style: TextStyle(
+                                          color: greyColor,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      "Particular",
+                                      style: TextStyle(
+                                          color: greyColor,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      ride.lrNo,
+                                      style: TextStyle(
+                                          color: blueColor,
+                                          fontSize: tS * 15,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: .56),
+                                    ),
+                                    Text(
+                                      ride.particular,
+                                      style: TextStyle(
+                                          color: blueColor,
+                                          fontSize: tS * 15,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: .56),
+                                    ),
+                                  ],
+                                ),
+                                const Divider(
+                                  color: Colors.transparent,
+                                  height: 6,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Text(
+                                      "Quantity",
+                                      style: TextStyle(
+                                          color: greyColor,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      "Rate",
+                                      style: TextStyle(
+                                          color: greyColor,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      ride.quantity.toString(),
+                                      style: TextStyle(
+                                          color: blueColor,
+                                          fontSize: tS * 15,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: .56),
+                                    ),
+                                    Text(
+                                      ride.rate.toString(),
+                                      style: TextStyle(
+                                          color: blueColor,
+                                          fontSize: tS * 15,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: .56),
+                                    ),
+                                  ],
+                                ),
+                                const Divider(
+                                  color: Colors.transparent,
+                                  height: 6,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Text(
+                                      "Detention",
+                                      style: TextStyle(
+                                          color: greyColor,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      "Ride Total",
+                                      style: TextStyle(
+                                          color: greyColor,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      ride.detention.toString(),
+                                      style: TextStyle(
+                                          color: blueColor,
+                                          fontSize: tS * 15,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: .56),
+                                    ),
+                                    Text(
+                                      ((ride.quantity * ride.rate) +
+                                              ride.detention!)
+                                          .toStringAsFixed(2),
+                                      style: TextStyle(
+                                          color: blueColor,
+                                          fontSize: tS * 15,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: .56),
+                                    ),
+                                  ],
+                                ),
+                                const Divider()
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList()
+              ],
+            ),
+            if (!showRides) const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Advance",
+                  style: TextStyle(
+                      fontSize: tS * 16,
+                      color: blueColor,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: .10),
+                ),
+                Text(
+                  "Total Amount",
+                  style: TextStyle(
+                      fontSize: tS * 16,
+                      color: blueColor,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: .10),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '\u{20B9} ${widget.invoice.advance.toStringAsFixed(2)}',
+                  style: TextStyle(
+                      fontSize: tS * 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: .56),
+                ),
+                Text(
+                  // ignore: prefer_interpolation_to_compose_strings
+                  '\u{20B9}' +
+                      (widget.invoice.total - widget.invoice.advance)
+                          .toStringAsFixed(2),
+                  style: TextStyle(
+                      fontSize: tS * 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: .10),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

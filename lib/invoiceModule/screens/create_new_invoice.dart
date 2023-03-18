@@ -72,6 +72,7 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
           id: '',
           invoiceNo: '',
           rides: rides,
+          total: getTotal(),
           source: fromController.text);
       await Provider.of<InvoiceProvider>(context, listen: false)
           .createInvoice(currentInvoice);
@@ -97,7 +98,7 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
     final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
         htmlContent, targetPath, invoiceNumberController.text);
 
-    print(generatedPdfFile.path);
+    // print(generatedPdfFile.path);
 
     try {
       await OpenFile.open(generatedPdfFile.path);

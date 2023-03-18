@@ -10,6 +10,7 @@ class Invoice {
   final String destination;
   final double advance;
   final List<Ride> rides;
+  final double total;
 
   Invoice(
       {required this.advance,
@@ -19,15 +20,18 @@ class Invoice {
       required this.id,
       required this.invoiceNo,
       required this.rides,
-      required this.source});
+      required this.source,
+      required this.total});
 
   static jsonToInvoice(value) => Invoice(
-      advance: value['advance'],
+      advance: value['advance'].toDouble(),
       customer: Customer.jsonToCustomer(value['customer']),
       date: DateTime.parse(value['date']),
       destination: value['destination'],
       id: value['_id'],
       invoiceNo: value['invoiceNo'],
-      rides: value['rides'].map((ride) => Ride.jsonToRide(ride)),
-      source: value['source']);
+      rides: List<Ride>.from(
+          value['rides'].map((ride) => Ride.jsonToRide(ride)).toList()),
+      source: value['source'],
+      total: value['total'] == null ? 0.0 : value['total'].toDouble());
 }
