@@ -1,12 +1,17 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:transport_app/invoiceModule/models/invoice.dart';
 
 import '../../colors.dart';
+import '../templates/vishal_template.dart';
 
 class InvoiceCard extends StatefulWidget {
   final Invoice invoice;
@@ -18,6 +23,25 @@ class InvoiceCard extends StatefulWidget {
 
 class _InvoiceCardState extends State<InvoiceCard> {
   bool showRides = false;
+
+  generatePDF() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    final targetPath = appDocDir.path;
+
+    final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
+        htmlContent, targetPath, "111");
+
+    // print(generatedPdfFile.path);
+
+    try {
+      await OpenFile.open(generatedPdfFile.path);
+    } catch (e) {
+      // print(e);
+    }
+
+    return generatedPdfFile.path;
+  }
+
   @override
   Widget build(BuildContext context) {
     final dW = MediaQuery.of(context).size.width;
@@ -52,7 +76,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
                           break;
 
                         case 3:
-                          //view
+                          generatePDF();
                           break;
 
                         case 4:

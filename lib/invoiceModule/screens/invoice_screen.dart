@@ -39,10 +39,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
           backgroundColor: primaryColor,
           title: const Text("Invoices"),
           elevation: 0,
-          actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded))
-          ],
         ),
+        endDrawer: Drawer(),
         body: SafeArea(
           child: ListView.builder(
             physics: const BouncingScrollPhysics(),

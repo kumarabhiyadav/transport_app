@@ -8,7 +8,7 @@ import 'package:transport_app/services/http_service.dart';
 import '../../api.dart';
 
 class InvoiceProvider with ChangeNotifier {
-  final List<Invoice> _invoices = [];
+  List<Invoice> _invoices = [];
 
   List<Invoice> get invoices {
     return [..._invoices];
@@ -32,6 +32,7 @@ class InvoiceProvider with ChangeNotifier {
   }
 
   fetchInvoices() async {
+    _invoices = [];
     try {
       final response = await HttpService.postRequest(
           url: domain + endPoints['fetchInvoices']!, body: {});
