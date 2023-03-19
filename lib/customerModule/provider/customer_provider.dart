@@ -35,4 +35,20 @@ class CustomerProvider with ChangeNotifier {
       return null;
     }
   }
+
+  searchCustomer(String query) async {
+    customers = [];
+    final response = await HttpService.postRequest(
+        url: domain + endPoints['fetchCustomers']!, body: {'query': query});
+
+    if (response['success']) {
+      // customers.add(Customer.jsonToRide(response['result']));
+      response['result']
+          .forEach((value) => customers.add(Customer.jsonToCustomer(value)));
+      notifyListeners();
+      return customers;
+    } else {
+      return null;
+    }
+  }
 }

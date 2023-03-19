@@ -11,6 +11,7 @@ import 'package:textfield_search/textfield_search.dart';
 
 import 'package:transport_app/common_widgets.dart';
 import 'package:transport_app/customerModule/model/customer.dart';
+import 'package:transport_app/customerModule/provider/customer_provider.dart';
 import 'package:transport_app/invoiceModule/models/invoice.dart';
 import 'package:transport_app/invoiceModule/provider/invoice_provider.dart';
 import 'package:transport_app/invoiceModule/templates/vishal_template.dart';
@@ -36,12 +37,9 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
   TextEditingController toController = TextEditingController();
   TextEditingController advanceController = TextEditingController();
   DateTime? date;
-  Customer? customer = Customer(
-      id: '',
-      companyName: "companyName",
-      customerName: "customerName",
-      email: "email",
-      phone: "phone");
+  Customer? customer;
+  List<Customer> customerSuggestions = [];
+  bool showCustomerSuggestion = false;
 
   List<Ride> rides = [];
 
@@ -70,12 +68,15 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
           date: date!,
           destination: toController.text,
           id: '',
-          invoiceNo: '',
+          invoiceNo: invoiceNumberController.text,
           rides: rides,
           total: getTotal(),
           source: fromController.text);
       await Provider.of<InvoiceProvider>(context, listen: false)
           .createInvoice(currentInvoice);
+
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
 
       setState(() {
         isLoading = false;
@@ -96,7 +97,7 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
     final targetPath = appDocDir.path;
 
     final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
-        htmlContent, targetPath, invoiceNumberController.text);
+        "", targetPath, invoiceNumberController.text);
 
     // print(generatedPdfFile.path);
 
@@ -107,6 +108,16 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
     }
 
     return generatedPdfFile.path;
+  }
+
+  final _debouncer = Debouncer(milliseconds: 500);
+
+  searchCustomer(query) async {
+    customerSuggestions = [];
+    final results = await Provider.of<CustomerProvider>(context, listen: false)
+        .searchCustomer(query);
+    customerSuggestions.addAll(results);
+    setState(() {});
   }
 
   @override
@@ -138,179 +149,227 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      Card(
-                        elevation: 2,
-                        child: Padding(
-                          padding: EdgeInsets.all(dW * 0.05),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Customer Name *",
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontSize: tS * 16,
-                                    fontWeight: FontWeight.w400),
+                      Stack(
+                        clipBehavior: Clip.hardEdge,
+                        fit: StackFit.passthrough,
+                        children: [
+                          Card(
+                            elevation: 2,
+                            child: Padding(
+                              padding: EdgeInsets.all(dW * 0.05),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Customer Name *",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontSize: tS * 16,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  TextFormField(
+                                    validator: ((value) {
+                                      if (value!.trim() == '') {
+                                        return 'Please Choose Customer';
+                                      }
+                                      return null;
+                                    }),
+                                    onChanged: ((val) {
+                                      setState(() {
+                                        showCustomerSuggestion = true;
+                                      });
+                                      _debouncer.run(() {
+                                        searchCustomer(val);
+                                      });
+                                    }),
+                                    controller: customerNameController,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: tS * 20),
+                                    cursorHeight: 28,
+                                    decoration: textformFeildDecoration(
+                                        'Start typing and select Customer...',
+                                        null),
+                                  ),
+                                  SizedBox(
+                                    height: dW * 0.05,
+                                  ),
+                                  Text(
+                                    "Invoice #*",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontSize: tS * 16,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  TextFormField(
+                                    validator: ((value) {
+                                      if (value!.trim() == '') {
+                                        return 'Please enter invoice no';
+                                      }
+                                      return null;
+                                    }),
+                                    controller: invoiceNumberController,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: tS * 20),
+                                    cursorHeight: 28,
+                                    decoration: textformFeildDecoration(
+                                        'INV-000002', null),
+                                  ),
+                                  SizedBox(
+                                    height: dW * 0.05,
+                                  ),
+                                  Text(
+                                    "Invoice Date *",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontSize: tS * 16,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(2021),
+                                              lastDate: DateTime(
+                                                  DateTime.now().year + 2))
+                                          .then((value) {
+                                        if (value != null) {
+                                          date = value;
+                                          dateController.text =
+                                              DateFormat('dd MMM yyyy')
+                                                  .format(date!);
+                                        }
+                                      });
+                                    },
+                                    child: TextFormField(
+                                      validator: ((value) {
+                                        if (value!.trim() == '') {
+                                          return 'Please Choose date';
+                                        }
+                                        return null;
+                                      }),
+                                      enabled: false,
+                                      controller: dateController,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: tS * 20),
+                                      cursorHeight: 28,
+                                      decoration: textformFeildDecoration(
+                                          'Date', Icons.calendar_month),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: dW * 0.05,
+                                  ),
+                                  Text(
+                                    "From",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontSize: tS * 16,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  TextFormField(
+                                    validator: ((value) {
+                                      if (value!.trim() == '') {
+                                        return 'Please select Source';
+                                      }
+                                      return null;
+                                    }),
+                                    controller: fromController,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: tS * 20),
+                                    cursorHeight: 28,
+                                    decoration: textformFeildDecoration(
+                                        'Start typing and select location',
+                                        null),
+                                  ),
+                                  SizedBox(
+                                    height: dW * 0.05,
+                                  ),
+                                  Text(
+                                    "To",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontSize: tS * 16,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  TextFormField(
+                                    validator: ((value) {
+                                      if (value!.trim() == '') {
+                                        return 'Please enter destination';
+                                      }
+                                      return null;
+                                    }),
+                                    controller: toController,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: tS * 20),
+                                    cursorHeight: 28,
+                                    decoration: textformFeildDecoration(
+                                        'Start typing and select location',
+                                        null),
+                                  ),
+                                  SizedBox(
+                                    height: dW * 0.05,
+                                  ),
+                                  Text(
+                                    "Advance",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontSize: tS * 16,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  TextFormField(
+                                      controller: advanceController,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: tS * 20),
+                                      cursorHeight: 28,
+                                      decoration: textformFeildDecoration(
+                                          '\u{20B9}', null))
+                                ],
                               ),
-                              TextFieldSearch(
-                                  initialList: [],
-                                  textStyle: TextStyle(
-                                      color: Colors.black, fontSize: tS * 20),
-                                  label: "label",
-                                  decoration: textformFeildDecoration(
-                                      'Start typing and select Customer...',
-                                      null),
-                                  controller: customerNameController),
-                              // TextFormField(
-                              //   validator: ((value) {
-                              //     if (value!.trim() == '') {
-                              //       return 'Please Choose Customer';
-                              //     }
-                              //     return null;
-                              //   }),
-                              //   controller: customerNameController,
-                              //   style:
-                              //       TextStyle(color: Colors.black, fontSize: tS * 20),
-                              //   cursorHeight: 28,
-                              //   decoration: textformFeildDecoration(
-                              //       'Start typing and select Customer...', null),
-                              // ),
-                              SizedBox(
-                                height: dW * 0.05,
-                              ),
-                              Text(
-                                "Invoice #*",
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontSize: tS * 16,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              TextFormField(
-                                validator: ((value) {
-                                  if (value!.trim() == '') {
-                                    return 'Please enter invoice no';
-                                  }
-                                  return null;
-                                }),
-                                controller: invoiceNumberController,
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: tS * 20),
-                                cursorHeight: 28,
-                                decoration:
-                                    textformFeildDecoration('INV-000002', null),
-                              ),
-                              SizedBox(
-                                height: dW * 0.05,
-                              ),
-                              Text(
-                                "Invoice Date *",
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontSize: tS * 16,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2021),
-                                          lastDate:
-                                              DateTime(DateTime.now().year + 2))
-                                      .then((value) {
-                                    if (value != null) {
-                                      date = value;
-                                      dateController.text =
-                                          DateFormat('dd MMM yyyy')
-                                              .format(date!);
-                                    }
-                                  });
-                                },
-                                child: TextFormField(
-                                  validator: ((value) {
-                                    if (value!.trim() == '') {
-                                      return 'Please Choose date';
-                                    }
-                                    return null;
-                                  }),
-                                  enabled: false,
-                                  controller: dateController,
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: tS * 20),
-                                  cursorHeight: 28,
-                                  decoration: textformFeildDecoration(
-                                      'Date', Icons.calendar_month),
+                            ),
+                          ),
+                          if (showCustomerSuggestion)
+                            Positioned(
+                              top: dH * 0.1,
+                              left: dW * 0.01,
+                              child: Container(
+                                width: dW * 0.8,
+                                color: Colors.blue.shade50,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ...customerSuggestions.map((e) =>
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                customer = e;
+                                                customerSuggestions = [];
+                                                customerNameController.text =
+                                                    customer!.companyName;
+                                              });
+                                            },
+                                            child: Container(
+                                                width: double.infinity,
+                                                decoration: const BoxDecoration(
+                                                    border: Border(
+                                                        bottom: BorderSide(
+                                                            color:
+                                                                Colors.white))),
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: dW * 0.05,
+                                                    horizontal: dW * 0.05),
+                                                child: Text(e.companyName)),
+                                          ))
+                                    ],
+                                  ),
                                 ),
                               ),
-                              SizedBox(
-                                height: dW * 0.05,
-                              ),
-                              Text(
-                                "From",
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontSize: tS * 16,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              TextFormField(
-                                validator: ((value) {
-                                  if (value!.trim() == '') {
-                                    return 'Please select Source';
-                                  }
-                                  return null;
-                                }),
-                                controller: fromController,
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: tS * 20),
-                                cursorHeight: 28,
-                                decoration: textformFeildDecoration(
-                                    'Start typing and select location', null),
-                              ),
-                              SizedBox(
-                                height: dW * 0.05,
-                              ),
-                              Text(
-                                "To",
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontSize: tS * 16,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              TextFormField(
-                                validator: ((value) {
-                                  if (value!.trim() == '') {
-                                    return 'Please enter destination';
-                                  }
-                                  return null;
-                                }),
-                                controller: toController,
-                                showCursor: false,
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: tS * 20),
-                                cursorHeight: 28,
-                                decoration: textformFeildDecoration(
-                                    'Start typing and select location', null),
-                              ),
-                              SizedBox(
-                                height: dW * 0.05,
-                              ),
-                              Text(
-                                "Advance",
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontSize: tS * 16,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              TextFormField(
-                                  controller: advanceController,
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: tS * 20),
-                                  cursorHeight: 28,
-                                  decoration:
-                                      textformFeildDecoration('\u{20B9}', null))
-                            ],
-                          ),
-                        ),
+                            )
+                        ],
                       ),
                       SizedBox(
                         height: dH * 0.01,

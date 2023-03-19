@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:transport_app/colors.dart';
 import 'package:transport_app/invoiceModule/models/invoice.dart';
@@ -13,8 +14,15 @@ class InvoiceScreen extends StatefulWidget {
 }
 
 class _InvoiceScreenState extends State<InvoiceScreen> {
+  bool isLoading = false;
   myInit() async {
+    setState(() {
+      isLoading = true;
+    });
     Provider.of<InvoiceProvider>(context, listen: false).fetchInvoices();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -41,15 +49,19 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
           elevation: 0,
         ),
         endDrawer: Drawer(),
-        body: SafeArea(
-          child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.symmetric(
-                vertical: dW * 0.05, horizontal: dW * 0.02),
-            itemBuilder: ((context, index) =>
-                InvoiceCard(invoice: invoices[index])),
-            itemCount: invoices.length,
-          ),
-        ));
+        body: isLoading
+            ? const SpinKitFadingCube(
+                color: primaryColor,
+              )
+            : SafeArea(
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  padding: EdgeInsets.symmetric(
+                      vertical: dW * 0.05, horizontal: dW * 0.02),
+                  itemBuilder: ((context, index) =>
+                      InvoiceCard(invoice: invoices[index])),
+                  itemCount: invoices.length,
+                ),
+              ));
   }
 }

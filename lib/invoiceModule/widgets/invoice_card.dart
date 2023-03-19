@@ -29,7 +29,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
     final targetPath = appDocDir.path;
 
     final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
-        htmlContent, targetPath, "111");
+        getBill(widget.invoice), targetPath, "111");
 
     // print(generatedPdfFile.path);
 
