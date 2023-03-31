@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:transport_app/colors.dart';
-import 'package:transport_app/invoiceModule/create_new_invoice.dart';
-import 'package:transport_app/rideModule/screens/rides_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,113 +18,173 @@ class _HomeScreenState extends State<HomeScreen> {
     final tS = MediaQuery.of(context).textScaleFactor;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        title: const Text("Home"),
-        elevation: 0,
-        actions: [
-          IconButton(
-              onPressed: () {}, icon: const Icon(Icons.notifications_active))
-        ],
-      ),
-      drawer: const Drawer(),
-      body: Column(children: [
-        Container(
-          height: dH * 0.3,
-          width: dW,
-          color: primaryColor,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: dW * 0.11,
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.person,
-                  color: greyColor,
-                  size: dW * 0.1,
-                ),
-              ),
-              SizedBox(
-                height: dH * 0.025,
-              ),
-              Text(
-                "Welcome, Abhinav Yadav",
-                style: TextStyle(
-                    fontSize: tS * 20,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: .48,
-                    color: Colors.white),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          color: backgroundColor,
-          padding: EdgeInsets.symmetric(horizontal: dW * 0.05),
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(
-                  vertical: dH * 0.02,
-                ),
-                child: Row(
+      body: SafeArea(
+          child: Container(
+        width: dW,
+        padding: EdgeInsets.symmetric(horizontal: dW * 0.06),
+        child: Column(
+          children: [
+            SizedBox(
+              height: dW * 0.1,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(
-                      Icons.library_add_check_outlined,
-                      color: Colors.black,
+                    Container(
+                      padding: EdgeInsets.all(dW * 0.03),
+                      height: dW * 0.5,
+                      width: dW * 0.4,
+                      alignment: Alignment.bottomLeft,
+                      // color: Colors.red,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          color: primaryColor),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Class Room",
+                            style: GoogleFonts.lato(
+                                fontSize: tS * 16,
+                                letterSpacing: .56,
+                                fontWeight: FontWeight.w600,
+                                color: whiteColor),
+                          ),
+                          Text(
+                            "Manage Your Classroom",
+                            style: GoogleFonts.lato(
+                                fontSize: tS * 10,
+                                letterSpacing: .56,
+                                fontWeight: FontWeight.w400,
+                                color: whiteColor),
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(
-                      width: dH * 0.01,
+                    SizedBox(height: dW * 0.05),
+                    Container(
+                      padding: EdgeInsets.all(dW * 0.03),
+                      height: dW * 0.45,
+                      width: dW * 0.4,
+                      alignment: Alignment.bottomLeft,
+                      // color: Colors.red,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          color: primaryColor),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Students",
+                            style: GoogleFonts.lato(
+                                fontSize: tS * 16,
+                                letterSpacing: .56,
+                                fontWeight: FontWeight.w600,
+                                color: whiteColor),
+                          ),
+                          Text(
+                            "View Students",
+                            style: GoogleFonts.lato(
+                                fontSize: tS * 10,
+                                letterSpacing: .56,
+                                fontWeight: FontWeight.w400,
+                                color: whiteColor),
+                          ),
+                        ],
+                      ),
                     ),
-                    Text(
-                      'QUICK CREATE',
-                      style: TextStyle(
-                          fontSize: tS * 15, fontWeight: FontWeight.w500),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(dW * 0.03),
+                      height: dW * 0.45,
+                      width: dW * 0.4,
+                      alignment: Alignment.bottomLeft,
+                      // color: Colors.red,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          color: primaryColor),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Students",
+                            style: GoogleFonts.lato(
+                                fontSize: tS * 16,
+                                letterSpacing: .56,
+                                fontWeight: FontWeight.w600,
+                                color: whiteColor),
+                          ),
+                          Text(
+                            "View Students",
+                            style: GoogleFonts.lato(
+                                fontSize: tS * 10,
+                                letterSpacing: .56,
+                                fontWeight: FontWeight.w400,
+                                color: whiteColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: dW * 0.05),
+                    Container(
+                      padding: EdgeInsets.all(dW * 0.03),
+                      height: dW * 0.5,
+                      width: dW * 0.4,
+                      alignment: Alignment.bottomLeft,
+                      // color: Colors.red,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          color: primaryColor),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Attendance",
+                            style: GoogleFonts.lato(
+                                fontSize: tS * 16,
+                                letterSpacing: .56,
+                                fontWeight: FontWeight.w600,
+                                color: whiteColor),
+                          ),
+                          Text(
+                            "Today's Attendance",
+                            style: GoogleFonts.lato(
+                                fontSize: tS * 10,
+                                letterSpacing: .56,
+                                fontWeight: FontWeight.w400,
+                                color: whiteColor),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  HomeOptions(
-                    function: () {},
-                    icon: Icons.person_outline,
-                    title: 'Add Customer',
-                  ),
-                  HomeOptions(
-                    function: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CreateNewInvoice())),
-                    icon: Icons.receipt_long,
-                    title: 'Create Invoice',
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: dH * 0.02,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  HomeOptions(
-                    title: 'Rides',
-                    function: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RideScreen())),
-                    icon: Icons.airport_shuttle_outlined,
-                  )
-                ],
-              ),
-            ],
-          ),
-        )
-      ]),
+              ],
+            ),
+          ],
+        ),
+      )),
     );
   }
 }

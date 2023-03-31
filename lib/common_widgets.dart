@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'colors.dart';
 
-titleTextStyle() => const TextStyle(
-    fontSize: 15, fontWeight: FontWeight.w500, letterSpacing: 0.65);
 textformFeildDecoration(hintText, suffixIcon) => InputDecoration(
       focusColor: primaryColor,
       iconColor: primaryColor,
@@ -23,3 +22,30 @@ textformFeildDecoration(hintText, suffixIcon) => InputDecoration(
         borderSide: BorderSide(color: primaryColor),
       ),
     );
+
+class CustomText extends StatelessWidget {
+  final double tS;
+  final double fontSize;
+  final Color? color;
+  final String text;
+
+  const CustomText(
+      {super.key,
+      required this.text,
+      this.color = primaryColor,
+      this.fontSize = 18,
+      required this.tS});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      softWrap: true,
+      style: GoogleFonts.lato(
+          fontSize: tS * fontSize,
+          letterSpacing: .56,
+          fontWeight: FontWeight.w400,
+          color: color),
+    );
+  }
+}

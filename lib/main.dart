@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:transport_app/authModule/Bottom_navigations.dart';
+import 'package:transport_app/authModule/screens/profile_screen.dart';
+import 'package:transport_app/classroomModule/providers/classroom_provider.dart';
+import 'package:transport_app/communityModule/screens/communityScreen.dart';
 import 'package:transport_app/homeModule/home_screen.dart';
-import 'package:transport_app/rideModule/provider/ride_provider.dart';
 
 void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,13 +17,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => RideProvider()),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => ClassRoomProvider())],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'transport',
-        home: HomeScreen(),
+        home: BottomNavigations(),
       ),
     );
   }
