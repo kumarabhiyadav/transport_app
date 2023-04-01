@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:transport_app/classroomModule/screens/classroom_screen.dart';
 
 import 'package:transport_app/colors.dart';
 
@@ -35,38 +36,46 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(dW * 0.03),
-                      height: dW * 0.5,
-                      width: dW * 0.4,
-                      alignment: Alignment.bottomLeft,
-                      // color: Colors.red,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                          color: primaryColor),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Class Room",
-                            style: GoogleFonts.lato(
-                                fontSize: tS * 16,
-                                letterSpacing: .56,
-                                fontWeight: FontWeight.w600,
-                                color: whiteColor),
-                          ),
-                          Text(
-                            "Manage Your Classroom",
-                            style: GoogleFonts.lato(
-                                fontSize: tS * 10,
-                                letterSpacing: .56,
-                                fontWeight: FontWeight.w400,
-                                color: whiteColor),
-                          ),
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ClassRoomScreen()));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(dW * 0.03),
+                        height: dW * 0.5,
+                        width: dW * 0.4,
+                        alignment: Alignment.bottomLeft,
+                        // color: Colors.red,
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                            color: primaryColor),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Class Room",
+                              style: GoogleFonts.lato(
+                                  fontSize: tS * 16,
+                                  letterSpacing: .56,
+                                  fontWeight: FontWeight.w600,
+                                  color: whiteColor),
+                            ),
+                            Text(
+                              "Manage Your Classroom",
+                              style: GoogleFonts.lato(
+                                  fontSize: tS * 10,
+                                  letterSpacing: .56,
+                                  fontWeight: FontWeight.w400,
+                                  color: whiteColor),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(height: dW * 0.05),

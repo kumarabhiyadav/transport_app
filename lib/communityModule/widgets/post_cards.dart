@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -5,16 +7,18 @@ import '../../colors.dart';
 import '../../common_widgets.dart';
 
 class PostCard extends StatelessWidget {
-  const PostCard({super.key});
+  final post;
+  const PostCard({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
     final tS = MediaQuery.of(context).textScaleFactor;
     final dW = MediaQuery.of(context).size.width;
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: dW * 0.05),
       padding: EdgeInsets.symmetric(horizontal: dW * 0.02, vertical: dW * 0.03),
       decoration: BoxDecoration(
-        border: Border.all(color: primaryColor),
+        border: Border.all(color: primaryColor.withOpacity(0.6), width: 0.5),
         borderRadius: const BorderRadius.all(
           Radius.circular(8),
         ),
@@ -37,7 +41,9 @@ class PostCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(),
+              const CircleAvatar(
+                child: Icon(Icons.person),
+              ),
               SizedBox(
                 width: dW * 0.02,
               ),
@@ -46,13 +52,13 @@ class PostCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                    text: "Abhinav Yadav",
+                    text: post['user']['name'],
                     tS: tS,
                     fontSize: 14,
                   ),
                   CustomText(
-                    text:
-                        DateFormat('dd MMM yyyy h:m a').format(DateTime.now()),
+                    text: DateFormat('dd MMM yyyy h:m a')
+                        .format(DateTime.parse(post['createdAt']).toLocal()),
                     tS: tS,
                     fontSize: 10,
                   )
@@ -63,6 +69,27 @@ class PostCard extends StatelessWidget {
           Divider(
             indent: dW * 0.1,
           ),
+          if (post['title'] != "")
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: SizedBox(
+                    width: dW * 0.75,
+                    child: CustomText(
+                      text: post['title'],
+                      tS: tS,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,16 +98,16 @@ class PostCard extends StatelessWidget {
               ),
               Container(
                 alignment: Alignment.topLeft,
-                child: Container(
-                  width: dW * 0.8,
-                  child: CustomText(
-                    text:
-                        "This is just a post about a life where we can be add some thing about any thing and life goes on open letter by talha anjum",
-                    tS: tS,
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                ),
+                child: post['photo'] != null
+                    ? SizedBox(
+                        width: dW * 0.7,
+                        height: dW * 0.4,
+                        child: Image.network(
+                          post['photo'],
+                          fit: BoxFit.fill,
+                        ),
+                      )
+                    : null,
               ),
             ],
           ),
@@ -96,10 +123,19 @@ class PostCard extends StatelessWidget {
                 const CircleAvatar(
                   backgroundColor: Colors.transparent,
                 ),
-                const Icon(
-                  Icons.favorite,
-                  color: Colors.red,
-                ),
+                post['liked']
+                    ? const Icon(
+                        Icons.favorite_rounded,
+                        color: Colors.red,
+                      )
+                    : const Icon(
+                        Icons.favorite_border_rounded,
+                        color: Colors.red,
+                      ),
+                Container(
+                    margin: EdgeInsets.symmetric(horizontal: dW * 0.01),
+                    child: CustomText(
+                        text: post['likeCounts'].toString(), tS: tS)),
                 SizedBox(
                   width: dW * 0.04,
                 ),
@@ -107,6 +143,10 @@ class PostCard extends StatelessWidget {
                   Icons.comment,
                   color: primaryColor,
                 ),
+                Container(
+                    margin: EdgeInsets.symmetric(horizontal: dW * 0.01),
+                    child: CustomText(
+                        text: post['likeCounts'].toString(), tS: tS)),
               ],
             ),
           ),

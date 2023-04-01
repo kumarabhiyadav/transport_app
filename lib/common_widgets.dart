@@ -6,9 +6,13 @@ import 'colors.dart';
 textformFeildDecoration(hintText, suffixIcon) => InputDecoration(
       focusColor: primaryColor,
       iconColor: primaryColor,
-      suffixIcon: suffixIcon == null ? null : Icon(suffixIcon),
+      suffixIcon: suffixIcon == null ? null : suffixIcon,
       suffixIconColor: primaryColor,
-      hintStyle: TextStyle(color: Colors.grey.shade300, fontSize: 18),
+      hintStyle: GoogleFonts.lato(
+          fontSize: 16,
+          letterSpacing: .56,
+          fontWeight: FontWeight.w400,
+          color: Colors.grey.shade300),
       contentPadding: const EdgeInsets.symmetric(vertical: 6),
       isDense: true,
       hintText: hintText,
@@ -28,12 +32,14 @@ class CustomText extends StatelessWidget {
   final double fontSize;
   final Color? color;
   final String text;
+  final FontWeight? fontWeight;
 
   const CustomText(
       {super.key,
       required this.text,
       this.color = primaryColor,
       this.fontSize = 18,
+      this.fontWeight = FontWeight.w400,
       required this.tS});
 
   @override
@@ -44,7 +50,7 @@ class CustomText extends StatelessWidget {
       style: GoogleFonts.lato(
           fontSize: tS * fontSize,
           letterSpacing: .56,
-          fontWeight: FontWeight.w400,
+          fontWeight: fontWeight,
           color: color),
     );
   }

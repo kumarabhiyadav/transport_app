@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transport_app/authModule/screens/profile_screen.dart';
 import 'package:transport_app/colors.dart';
-import 'package:transport_app/communityModule/screens/communityScreen.dart';
+import 'package:transport_app/communityModule/screens/community_screen.dart';
 import 'package:transport_app/homeModule/home_screen.dart';
 
 class BottomNavigations extends StatefulWidget {
