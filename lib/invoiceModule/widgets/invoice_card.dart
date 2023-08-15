@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,6 +42,45 @@ class _InvoiceCardState extends State<InvoiceCard> {
     return generatedPdfFile.path;
   }
 
+  newPdf()async{
+final pdf = pw.Document();
+
+  pdf.addPage(
+    pw.Page(
+      build: (pw.Context context) => pw.Column(
+         children: [
+
+          pw.Row(
+            children: [
+              pw.Text('Vishal Roadlines')
+            ]
+          ),
+          pw.Text("Vishal RoadLines"),
+
+         ]
+      ),
+    ),
+  );
+
+
+
+
+
+
+
+    // File IO for PDF
+    final appDocDir = await getApplicationDocumentsDirectory();
+    final appDocPath = appDocDir.path;
+    final file = File('$appDocPath/document.pdf');
+    print('Save as file ${file.path} ...');
+    await file.writeAsBytes(await pdf.save()); 
+    await OpenFile.open(file.path);  
+   
+
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final dW = MediaQuery.of(context).size.width;
@@ -76,7 +115,8 @@ class _InvoiceCardState extends State<InvoiceCard> {
                           break;
 
                         case 3:
-                          generatePDF();
+                          // generatePDF();
+                          newPdf();
                           break;
 
                         case 4:
@@ -278,10 +318,10 @@ class _InvoiceCardState extends State<InvoiceCard> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
+                             const   Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: const [
+                                  children:  [
                                     Text(
                                       "Truck Number",
                                       style: TextStyle(
@@ -323,10 +363,10 @@ class _InvoiceCardState extends State<InvoiceCard> {
                                   color: Colors.transparent,
                                   height: 6,
                                 ),
-                                Row(
+                            const    Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: const [
+                                  children:  [
                                     Text(
                                       "LR No.",
                                       style: TextStyle(
@@ -367,10 +407,10 @@ class _InvoiceCardState extends State<InvoiceCard> {
                                   color: Colors.transparent,
                                   height: 6,
                                 ),
-                                Row(
+                             const   Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: const [
+                                  children:  [
                                     Text(
                                       "Quantity",
                                       style: TextStyle(
@@ -411,10 +451,10 @@ class _InvoiceCardState extends State<InvoiceCard> {
                                   color: Colors.transparent,
                                   height: 6,
                                 ),
-                                Row(
+                              const  Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: const [
+                                  children:  [
                                     Text(
                                       "Detention",
                                       style: TextStyle(
