@@ -46,6 +46,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
   newPdf()async{
 final pdf = pw.Document(
   pageMode: PdfPageMode.fullscreen
+  
 );
   pdf.addPage(
     pw.Page(
