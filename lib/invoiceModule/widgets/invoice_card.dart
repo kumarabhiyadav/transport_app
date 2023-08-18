@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
+import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import 'package:intl/intl.dart';
@@ -43,19 +44,77 @@ class _InvoiceCardState extends State<InvoiceCard> {
   }
 
   newPdf()async{
-final pdf = pw.Document();
-
+final pdf = pw.Document(
+  pageMode: PdfPageMode.fullscreen
+);
   pdf.addPage(
     pw.Page(
+
       build: (pw.Context context) => pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.center,
+        mainAxisSize: pw.MainAxisSize.max,
          children: [
+         
+         pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.SizedBox.shrink(),
+            pw.Text("|| OM SAI ||",style:  pw.TextStyle(color: PdfColor.fromHex('#FF0000'))),
+            pw.Text("Tel. 022-25802718",
+             style: const pw.TextStyle(
+              fontSize: 12
+             )
+            ),
+
+          
+         ]),
 
           pw.Row(
-            children: [
-              pw.Text('Vishal Roadlines')
-            ]
-          ),
-          pw.Text("Vishal RoadLines"),
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.SizedBox.shrink(),
+
+            pw.Column(
+              children: [
+            pw.Text("Subject to Thane Jurisdiction",
+             style: const pw.TextStyle(
+              fontSize: 12
+             )
+            ),
+
+              ],
+            ), 
+              pw.Text("Mob. 7021197820",
+             style: const pw.TextStyle(
+              fontSize: 12
+             )
+            ),
+         ]),
+          pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.SizedBox.shrink(),
+            pw.Column(
+              children: [
+            pw.Text("VISHAL ROADLINES",
+             style:  pw.TextStyle(
+              fontSize: 18,
+              color:PdfColor.fromHex('#FF0000') ,
+              fontWeight:pw.FontWeight.bold,
+             )
+            ),
+
+              ],
+            ),
+pw.Text("Mob. 7021197820",
+             style: const pw.TextStyle(
+              fontSize: 12
+             )
+            ),
+            
+
+          
+         ])
 
          ]
       ),
