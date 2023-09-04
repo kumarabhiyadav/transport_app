@@ -44,82 +44,133 @@ class _InvoiceCardState extends State<InvoiceCard> {
   }
 
   newPdf()async{
+
+      final headers = ['Tanker No.', 'L.R.No.', 'Date','Quantity' , 'Detention', 'PARTICULARS', 'Amount(Rs.)'];
+    List<List<String>> data = [];
+
+    for (var e in widget.invoice.rides) {
+       List<String> temp =[];
+       temp.add(e.truckNumber);
+       temp.add(e.lrNo);
+       temp.add(DateFormat('dd-MMM-yyyy').format(e.date));
+       temp.add(e.quantity.toStringAsFixed(2));
+       temp.add(e.detention! < 0 ? '':e.detention!.toStringAsFixed(2)  );
+       temp.add(e.particular);
+       temp.add((e.quantity*e.rate).toStringAsFixed(2));
+       data.add(temp);
+
+
+    }  
+    final tableHeaders = headers.map((header) {
+    return pw.Container(
+      padding:const pw.EdgeInsets.symmetric(horizontal: 2,vertical: 4),
+      alignment: pw.Alignment.center,
+      decoration: pw.BoxDecoration(
+        border: pw.Border.all(),
+      ),
+      child: pw.Text(header, style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+    );
+  }).toList();
+
+  final tableRows = data.map((row) {
+    return row.map((cell) {
+      return pw.Container(
+      padding:const pw.EdgeInsets.symmetric(horizontal: 2,vertical: 4),
+        
+        alignment: pw.Alignment.center,
+        decoration: pw.BoxDecoration(
+          border: pw.Border.all(),
+        ),
+        child: pw.Text(cell),
+      );
+    }).toList();
+  }).toList();
+
+  final table = pw.Table(
+    border: pw.TableBorder.all(),
+    children: [
+      pw.TableRow(children: tableHeaders),
+      ...tableRows.map((row) => pw.TableRow(children: row)),
+    ],
+  );
+
+
 final pdf = pw.Document(
   pageMode: PdfPageMode.fullscreen
   
 );
   pdf.addPage(
     pw.Page(
-
-      build: (pw.Context context) => pw.Column(
+      build: (pw.Context context) => pw.Container(
+        width: double.infinity,
+        child:pw.Stack(children:[
+            pw.Container(
+              width: double.infinity,
+              child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         mainAxisSize: pw.MainAxisSize.max,
          children: [
-         
-         pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          children: [
-            pw.SizedBox.shrink(),
             pw.Text("|| OM SAI ||",style:  pw.TextStyle(color: PdfColor.fromHex('#FF0000'))),
-            pw.Text("Tel. 022-25802718",
+             pw.Text("Subject to Thane Jurisdiction",
              style: const pw.TextStyle(
-              fontSize: 12
+              fontSize: 10
              )
             ),
-
-          
-         ]),
-
-          pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          children: [
-            pw.SizedBox.shrink(),
-
-            pw.Column(
-              children: [
-            pw.Text("Subject to Thane Jurisdiction",
-             style: const pw.TextStyle(
-              fontSize: 12
-             )
-            ),
-
-              ],
-            ), 
-              pw.Text("Mob. 7021197820",
-             style: const pw.TextStyle(
-              fontSize: 12
-             )
-            ),
-         ]),
-          pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          children: [
-            pw.SizedBox.shrink(),
-            pw.Column(
-              children: [
-            pw.Text("VISHAL ROADLINES",
+             pw.Text("VISHAL ROADLINES",
              style:  pw.TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               color:PdfColor.fromHex('#FF0000') ,
               fontWeight:pw.FontWeight.bold,
              )
             ),
+            pw.Text('Fleet Owners & Transport Contractor'),
+            pw.Text('Stainless Steel Tanker for Petroleum'),
+            pw.Text('All kind of Oil & Chemical Solvent'),
+            pw.SizedBox(height: 10),
+            pw.Divider(height: 2),
+            pw.Text('Office :  Ajaykumar Yadav, Kajuwadi, Opp. Shivsena Shakha, Wagle Estate, Thane (W)-400604', style:  pw.TextStyle(
+              fontSize: 10,
+              fontWeight:pw.FontWeight.bold,
+             )),
+            pw.Text('Email : vishalroadlines1976@gmail.com',style:  pw.TextStyle(
+              fontSize: 10,
+              fontWeight:pw.FontWeight.bold,
+             )),
+            pw.Divider(height: 2),
+            pw.SizedBox(height: 10),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+              pw.Text('No. ${widget.invoice.invoiceNo}'),
+              pw.Row(children: 
+              [
+              pw.Text('Date : '),
+              pw.Text(DateFormat('dd-MM-yyyy').format(widget.invoice.date))
+              ]
+              ),
+            ]),
+            pw.SizedBox(height: 10),
+            table,
 
-              ],
-            ),
-pw.Text("Mob. 7021197820",
-             style: const pw.TextStyle(
-              fontSize: 12
-             )
-            ),
-            
 
-          
-         ])
 
          ]
       ),
+            ),
+            pw.Positioned(
+              right: 0.0,
+              child: pw.Container(
+              child: pw.Column(children: [
+                pw.Text("7021197820"),
+                pw.Text("7021197820"),
+                pw.Text("7021197820"),
+                pw.Text("7021197820"),
+
+              ])
+            ))
+        ] )
     ),
+    )
   );
 
 

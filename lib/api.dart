@@ -1,7 +1,7 @@
-const domain = "http://169.254.174.59:6001";
+// const domain = "http://169.254.174.59:6001";
 // const domain = "https://transport-app-api.onrender.com";
 
-// const domain = "http://127.0.0.1:6001";
+const domain = "http://127.0.0.1:6001";
 
 const endPoints = {
   //Rides
