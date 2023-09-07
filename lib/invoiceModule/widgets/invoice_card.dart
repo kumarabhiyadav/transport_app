@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:transport_app/invoiceModule/models/invoice.dart';
+import 'package:transport_app/rideModule/model/ride_model.dart';
 
 import '../../colors.dart';
 import '../templates/vishal_template.dart';
@@ -48,19 +49,46 @@ class _InvoiceCardState extends State<InvoiceCard> {
       final headers = ['Tanker No.', 'L.R.No.', 'Date','Quantity' , 'Detention', 'PARTICULARS', 'Amount(Rs.)'];
     List<List<String>> data = [];
 
-    for (var e in widget.invoice.rides) {
-       List<String> temp =[];
-       temp.add(e.truckNumber);
-       temp.add(e.lrNo);
-       temp.add(DateFormat('dd-MMM-yyyy').format(e.date));
-       temp.add(e.quantity.toStringAsFixed(2));
-       temp.add(e.detention! < 0 ? '':e.detention!.toStringAsFixed(2)  );
-       temp.add(e.particular);
-       temp.add((e.quantity*e.rate).toStringAsFixed(2));
+    // for (var e in widget.invoice.rides) {
+    //    List<String> temp =[];
+    //    temp.add(e.truckNumber);
+    //    temp.add(e.lrNo);
+    //    temp.add(DateFormat('dd-MMM-yyyy').format(e.date));
+    //    temp.add(e.quantity.toStringAsFixed(2));
+    //    temp.add(e.detention! < 0 ? '':e.detention!.toStringAsFixed(2)  );
+    //    temp.add(e.particular);
+    //    temp.add((e.quantity*e.rate).toStringAsFixed(2));
+    //    data.add(temp);
+
+
+    // }  
+    for (int i =0; i<=10;i++){
+       if( i <widget.invoice.rides.length){
+      Ride ride = widget.invoice.rides[i];
+          List<String> temp =[];
+       temp.add(ride.truckNumber);
+       temp.add(ride.lrNo);
+       temp.add(DateFormat('dd-MMM-yyyy').format(ride.date));
+       temp.add(ride.quantity.toStringAsFixed(2));
+       temp.add(ride.detention! < 0 ? '':ride.detention!.toStringAsFixed(2)  );
+       temp.add(ride.particular);
+       temp.add((ride.quantity*ride.rate).toStringAsFixed(2));
        data.add(temp);
 
+       }else{
+       List<String> temp =[];
+       temp.add("");
+       temp.add("");
+       temp.add("");
+       temp.add("");
+       temp.add("");
+       temp.add("");
+       temp.add("");
+       data.add(temp);
+       }
 
-    }  
+    }
+
     final tableHeaders = headers.map((header) {
     return pw.Container(
       padding:const pw.EdgeInsets.symmetric(horizontal: 2,vertical: 4),
@@ -79,7 +107,9 @@ class _InvoiceCardState extends State<InvoiceCard> {
         
         alignment: pw.Alignment.center,
         decoration: pw.BoxDecoration(
-          border: pw.Border.all(),
+          border: pw.Border.symmetric(
+            vertical: pw.BorderSide(color: PdfColors.black)
+          ),
         ),
         child: pw.Text(cell),
       );
@@ -87,7 +117,9 @@ class _InvoiceCardState extends State<InvoiceCard> {
   }).toList();
 
   final table = pw.Table(
-    border: pw.TableBorder.all(),
+    border: pw.TableBorder.symmetric(
+      outside: pw.BorderSide(color: PdfColors.black)
+    ),
     children: [
       pw.TableRow(children: tableHeaders),
       ...tableRows.map((row) => pw.TableRow(children: row)),
