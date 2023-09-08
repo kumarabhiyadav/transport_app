@@ -34,4 +34,13 @@ class Invoice {
           value['rides'].map((ride) => Ride.jsonToRide(ride)).toList()),
       source: value['source'],
       total: value['total'] == null ? 0.0 : value['total'].toDouble());
+
+       double getRideTotal (){
+        double total = 0.0;
+        for (var ride in rides) { 
+          total+=(ride.rate * ride.quantity);
+        }
+        return total;
+        }
+        
 }

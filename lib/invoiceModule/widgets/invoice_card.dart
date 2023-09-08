@@ -3,8 +3,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
+import 'package:indian_currency_to_word/indian_currency_to_word.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+
 
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -44,184 +46,284 @@ class _InvoiceCardState extends State<InvoiceCard> {
     return generatedPdfFile.path;
   }
 
-  newPdf()async{
+  newPdf() async {
+   
+   final converter = AmountToWords();
 
-      final headers = ['Tanker No.', 'L.R.No.', 'Date','Quantity' , 'Detention', 'PARTICULARS', 'Amount(Rs.)'];
+
+    final headers = [
+      'Tanker No.',
+      'L.R.No.',
+      'Date',
+      'Quantity',
+      'Detention',
+      'PARTICULARS',
+      'Amount(Rs.)'
+    ];
     List<List<String>> data = [];
 
-    // for (var e in widget.invoice.rides) {
-    //    List<String> temp =[];
-    //    temp.add(e.truckNumber);
-    //    temp.add(e.lrNo);
-    //    temp.add(DateFormat('dd-MMM-yyyy').format(e.date));
-    //    temp.add(e.quantity.toStringAsFixed(2));
-    //    temp.add(e.detention! < 0 ? '':e.detention!.toStringAsFixed(2)  );
-    //    temp.add(e.particular);
-    //    temp.add((e.quantity*e.rate).toStringAsFixed(2));
-    //    data.add(temp);
-
-
-    // }  
-    for (int i =0; i<=10;i++){
-       if( i <widget.invoice.rides.length){
-      Ride ride = widget.invoice.rides[i];
-          List<String> temp =[];
-       temp.add(ride.truckNumber);
-       temp.add(ride.lrNo);
-       temp.add(DateFormat('dd-MMM-yyyy').format(ride.date));
-       temp.add(ride.quantity.toStringAsFixed(2));
-       temp.add(ride.detention! < 0 ? '':ride.detention!.toStringAsFixed(2)  );
-       temp.add(ride.particular);
-       temp.add((ride.quantity*ride.rate).toStringAsFixed(2));
-       data.add(temp);
-
-       }else{
-       List<String> temp =[];
-       temp.add("");
-       temp.add("");
-       temp.add("");
-       temp.add("");
-       temp.add("");
-       temp.add("");
-       temp.add("");
-       data.add(temp);
-       }
-
+    for (int i = 0; i <= 30; i++) {
+      if (i < widget.invoice.rides.length) {
+        Ride ride = widget.invoice.rides[i];
+        List<String> temp = [];
+        temp.add(ride.truckNumber);
+        temp.add(ride.lrNo);
+        temp.add(DateFormat('dd-MM-yyyy').format(ride.date));
+        temp.add(ride.quantity.toStringAsFixed(2));
+        temp.add(ride.detention! < 0 ? '' : ride.detention!.toStringAsFixed(2));
+        temp.add(ride.particular.toUpperCase());
+        temp.add((ride.quantity * ride.rate).toStringAsFixed(2));
+        data.add(temp);
+      } else {
+        List<String> temp = [];
+        temp.add("");
+        temp.add("");
+        temp.add("");
+        temp.add("");
+        temp.add("");
+        temp.add("");
+        temp.add("");
+        data.add(temp);
+      }
     }
 
     final tableHeaders = headers.map((header) {
-    return pw.Container(
-      padding:const pw.EdgeInsets.symmetric(horizontal: 2,vertical: 4),
-      alignment: pw.Alignment.center,
-      decoration: pw.BoxDecoration(
-        border: pw.Border.all(),
-      ),
-      child: pw.Text(header, style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-    );
-  }).toList();
-
-  final tableRows = data.map((row) {
-    return row.map((cell) {
       return pw.Container(
-      padding:const pw.EdgeInsets.symmetric(horizontal: 2,vertical: 4),
-        
+        padding: const pw.EdgeInsets.symmetric(horizontal: 2, vertical: 4),
         alignment: pw.Alignment.center,
         decoration: pw.BoxDecoration(
-          border: pw.Border.symmetric(
-            vertical: pw.BorderSide(color: PdfColors.black)
-          ),
+          border: pw.Border.all(),
         ),
-        child: pw.Text(cell),
+        child: pw.Text(header,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
       );
     }).toList();
-  }).toList();
 
-  final table = pw.Table(
-    border: pw.TableBorder.symmetric(
-      outside: pw.BorderSide(color: PdfColors.black)
-    ),
-    children: [
-      pw.TableRow(children: tableHeaders),
-      ...tableRows.map((row) => pw.TableRow(children: row)),
-    ],
-  );
+    final tableRows = data.map((row) {
+      return row.map((cell) {
+        return pw.Container(
+          padding: const pw.EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+          alignment: pw.Alignment.center,
+          decoration: const pw.BoxDecoration(
+            border: pw.Border.symmetric(
+                vertical: pw.BorderSide(color: PdfColors.black)),
+          ),
+          child: pw.Text(cell),
+        );
+      }).toList();
+    }).toList();
 
+    final table = pw.Table(
+      border: pw.TableBorder.symmetric(
+          outside: const pw.BorderSide(color: PdfColors.black)),
+      children: [
+        pw.TableRow(children: tableHeaders),
+        ...tableRows.map((row) => pw.TableRow(children: row)),
+      ],
+    );
 
-final pdf = pw.Document(
-  pageMode: PdfPageMode.fullscreen
-  
-);
-  pdf.addPage(
-    pw.Page(
+    List<List<String>> amountTableRow = [];
+    amountTableRow.add(
+        ['Amount', "${widget.invoice.getRideTotal().toStringAsFixed(2)} Rs."]);
+    amountTableRow
+        .add(['Advance', "${widget.invoice.advance.toStringAsFixed(2)} Rs."]);
+    amountTableRow.add([
+      'Balance',
+      "${(widget.invoice.getRideTotal() - widget.invoice.advance).toStringAsFixed(2)} Rs."
+    ]);
+
+    final amountRows = amountTableRow.map((row) {
+      return row.map((cell) {
+        return pw.Container(
+          padding: const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+          alignment: pw.Alignment.centerRight,
+          decoration: const pw.BoxDecoration(
+            border: pw.Border.symmetric(
+                vertical: pw.BorderSide(color: PdfColors.black)),
+          ),
+          child: pw.Text(cell,
+          textAlign: pw.TextAlign.right,
+              style: pw.TextStyle(fontWeight: pw.FontWeight.normal)),
+        );
+      }).toList();
+    }).toList();
+
+    final amountTable = pw.Table(
+        tableWidth: pw.TableWidth.min,
+        border: pw.TableBorder.all(),
+        children: [
+          const pw.TableRow(children: []),
+          ...amountRows.map((row) => pw.TableRow(children: row)),
+        ]);
+
+    final pdf = pw.Document(pageMode: PdfPageMode.fullscreen);
+    pdf.addPage(pw.Page(
       build: (pw.Context context) => pw.Container(
-        width: double.infinity,
-        child:pw.Stack(children:[
+          width: double.infinity,
+          child: pw.Stack(children: [
             pw.Container(
               width: double.infinity,
               child: pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.center,
-        mainAxisSize: pw.MainAxisSize.max,
-         children: [
-            pw.Text("|| OM SAI ||",style:  pw.TextStyle(color: PdfColor.fromHex('#FF0000'))),
-             pw.Text("Subject to Thane Jurisdiction",
-             style: const pw.TextStyle(
-              fontSize: 10
-             )
-            ),
-             pw.Text("VISHAL ROADLINES",
-             style:  pw.TextStyle(
-              fontSize: 14,
-              color:PdfColor.fromHex('#FF0000') ,
-              fontWeight:pw.FontWeight.bold,
-             )
-            ),
-            pw.Text('Fleet Owners & Transport Contractor'),
-            pw.Text('Stainless Steel Tanker for Petroleum'),
-            pw.Text('All kind of Oil & Chemical Solvent'),
-            pw.SizedBox(height: 10),
-            pw.Divider(height: 2),
-            pw.Text('Office :  Ajaykumar Yadav, Kajuwadi, Opp. Shivsena Shakha, Wagle Estate, Thane (W)-400604', style:  pw.TextStyle(
-              fontSize: 10,
-              fontWeight:pw.FontWeight.bold,
-             )),
-            pw.Text('Email : vishalroadlines1976@gmail.com',style:  pw.TextStyle(
-              fontSize: 10,
-              fontWeight:pw.FontWeight.bold,
-             )),
-            pw.Divider(height: 2),
-            pw.SizedBox(height: 10),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-              pw.Text('No. ${widget.invoice.invoiceNo}'),
-              pw.Row(children: 
-              [
-              pw.Text('Date : '),
-              pw.Text(DateFormat('dd-MM-yyyy').format(widget.invoice.date))
-              ]
-              ),
-            ]),
-            pw.SizedBox(height: 10),
-            table,
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisSize: pw.MainAxisSize.max,
+                  children: [
+                    pw.Text("|| OM SAI ||",
+                        style:
+                            pw.TextStyle(color: PdfColor.fromHex('#FF0000'))),
+                    pw.Text("Subject to Thane Jurisdiction",
+                        style: const pw.TextStyle(fontSize: 10)),
+                    pw.Text("VISHAL ROADLINES",
+                        style: pw.TextStyle(
+                          fontSize: 14,
+                          color: PdfColor.fromHex('#FF0000'),
+                          fontWeight: pw.FontWeight.bold,
+                        )),
+                    pw.Text('Fleet Owners & Transport Contractor'),
+                    pw.Text('Stainless Steel Tanker for Petroleum'),
+                    pw.Text('All kind of Oil & Chemical Solvent'),
+                    pw.SizedBox(height: 10),
+                    pw.Divider(height: 2),
+                    pw.Text(
+                        'Office :  Ajaykumar Yadav, Kajuwadi, Opp. Shivsena Shakha, Wagle Estate, Thane (W)-400604',
+                        style: pw.TextStyle(
+                          fontSize: 10,
+                          fontWeight: pw.FontWeight.bold,
+                        )),
+                    pw.Text('Email : vishalroadlines1976@gmail.com',
+                        style: pw.TextStyle(
+                          fontSize: 10,
+                          fontWeight: pw.FontWeight.bold,
+                        )),
+                    pw.Divider(height: 2),
+                    pw.SizedBox(height: 10),
+                    pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Text('No. ${widget.invoice.invoiceNo}',
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          pw.Row(children: [
+                            pw.Text('Date : '),
+                            pw.Text(DateFormat('dd-MM-yyyy')
+                                .format(widget.invoice.date))
+                          ]),
+                        ]),
+                    pw.SizedBox(height: 10),
+                    pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Container(
+                            width: 300,
+                            child: pw.RichText(
+                              text: pw.TextSpan(
+                                  text: 'M/s ',
+                                  style: const pw.TextStyle(fontSize: 12),
+                                  children: [
+                                    pw.TextSpan(
+                                        text:
+                                            " ${widget.invoice.customer.companyName} ${widget.invoice.customer.address}",
+                                        style: pw.TextStyle(
+                                            decorationStyle:
+                                                pw.TextDecorationStyle.solid,
+                                            fontWeight: pw.FontWeight.bold))
+                                  ]),
+                            ),
+                          ),
+                          pw.Container(
+                              padding: const pw.EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              decoration: pw.BoxDecoration(
+                                  border: pw.Border.all(),
+                                  borderRadius: pw.BorderRadius.circular(1)),
+                              child: pw.Text('PAN NO. ACGPY 8550 P',
+                                  style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold,
+                                      color: PdfColors.red)))
+                        ]),
+                    pw.SizedBox(height: 5),
+                      pw.Text(" Being cost of Transporting your products in our tanker as under ",
+                      ),
+                    pw.SizedBox(height: 5),
+
+                    pw.Row(
+                      mainAxisAlignment:pw.MainAxisAlignment.center,
+                      children: [
+                      pw.Text("From : "),
+                      pw.Text(" ${widget.invoice.source} ",
+                      style: pw.TextStyle(decoration: pw.TextDecoration.underline,fontWeight: pw.FontWeight.bold,letterSpacing: 0.56)
+                      ),
+                      pw.SizedBox(width: 50),
+                      pw.Text("To : "),
+                      pw.Text(" ${widget.invoice.destination} ",
+                      style: pw.TextStyle(decoration: pw.TextDecoration.underline,fontWeight: pw.FontWeight.bold,letterSpacing: 0.56)
+                      
+                      )
+                    ]),
+                    pw.SizedBox(height: 10),
+                    table,
+                    pw.SizedBox(height: 10),
+                    pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.end,
+                        children: [amountTable]),
+
+                    pw.SizedBox(height: 10),
+ 
+
+  pw.Row(
+    mainAxisAlignment: pw.MainAxisAlignment.end,
+    children: [
+         pw.Text(
+                      'FOR VISHAL ROADLINES',
+                      style: pw.TextStyle(color: PdfColors.red,letterSpacing: .45,fontSize: 12,fontWeight: pw.FontWeight.bold)
+                    ),
+
+    ]
+
+  ),
+                 
+                    pw.SizedBox(height: 10),
 
 
+                   pw.Row(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: 
+                     
+                   [
+                      pw.Text("Amount (in word) : ",),
 
-         ]
-      ),
+
+                      pw.Container(
+                        width: 300,
+                        child:  pw.Text(converter.convertAmountToWords(widget.invoice.getRideTotal()-widget.invoice.advance,ignoreDecimal: false),style:  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      ),
+                    
+
+
+                   ]),
+
+                      
+                  ]),
             ),
             pw.Positioned(
-              right: 0.0,
-              child: pw.Container(
-              child: pw.Column(children: [
-                pw.Text("7021197820"),
-                pw.Text("7021197820"),
-                pw.Text("7021197820"),
-                pw.Text("7021197820"),
-
-              ])
-            ))
-        ] )
-    ),
-    )
-  );
-
-
-
-
-
-
+                right: 0.0,
+                child: pw.Container(
+                    child: pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.end,
+                      children: [
+                  pw.Text("Mob No. 9920833549"),
+                  pw.Text("9987198275"),
+                 
+                ])))
+          ])),
+    ));
 
     // File IO for PDF
     final appDocDir = await getApplicationDocumentsDirectory();
     final appDocPath = appDocDir.path;
     final file = File('$appDocPath/document.pdf');
     print('Save as file ${file.path} ...');
-    await file.writeAsBytes(await pdf.save()); 
-    await OpenFile.open(file.path);  
-   
-
-
-
+    await file.writeAsBytes(await pdf.save());
+    await OpenFile.open(file.path);
   }
 
   @override
@@ -461,10 +563,10 @@ final pdf = pw.Document(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                             const   Row(
+                                const Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children:  [
+                                  children: [
                                     Text(
                                       "Truck Number",
                                       style: TextStyle(
@@ -506,10 +608,10 @@ final pdf = pw.Document(
                                   color: Colors.transparent,
                                   height: 6,
                                 ),
-                            const    Row(
+                                const Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children:  [
+                                  children: [
                                     Text(
                                       "LR No.",
                                       style: TextStyle(
@@ -550,10 +652,10 @@ final pdf = pw.Document(
                                   color: Colors.transparent,
                                   height: 6,
                                 ),
-                             const   Row(
+                                const Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children:  [
+                                  children: [
                                     Text(
                                       "Quantity",
                                       style: TextStyle(
@@ -594,10 +696,10 @@ final pdf = pw.Document(
                                   color: Colors.transparent,
                                   height: 6,
                                 ),
-                              const  Row(
+                                const Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children:  [
+                                  children: [
                                     Text(
                                       "Detention",
                                       style: TextStyle(
@@ -682,7 +784,7 @@ final pdf = pw.Document(
                 Text(
                   // ignore: prefer_interpolation_to_compose_strings
                   '\u{20B9}' +
-                      (widget.invoice.total - widget.invoice.advance)
+                      (widget.invoice.getRideTotal() - widget.invoice.advance)
                           .toStringAsFixed(2),
                   style: TextStyle(
                       fontSize: tS * 18,
