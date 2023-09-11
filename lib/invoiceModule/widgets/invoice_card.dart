@@ -7,7 +7,6 @@ import 'package:indian_currency_to_word/indian_currency_to_word.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -47,9 +46,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
   }
 
   newPdf() async {
-   
-   final converter = AmountToWords();
-
+    final converter = AmountToWords();
 
     final headers = [
       'Tanker No.',
@@ -142,7 +139,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
                 vertical: pw.BorderSide(color: PdfColors.black)),
           ),
           child: pw.Text(cell,
-          textAlign: pw.TextAlign.right,
+              textAlign: pw.TextAlign.right,
               style: pw.TextStyle(fontWeight: pw.FontWeight.normal)),
         );
       }).toList();
@@ -241,86 +238,154 @@ class _InvoiceCardState extends State<InvoiceCard> {
                                       color: PdfColors.red)))
                         ]),
                     pw.SizedBox(height: 5),
-                      pw.Text(" Being cost of Transporting your products in our tanker as under ",
-                      ),
+                    pw.Text(
+                      " Being cost of Transporting your products in our tanker as under ",
+                    ),
                     pw.SizedBox(height: 5),
-
                     pw.Row(
-                      mainAxisAlignment:pw.MainAxisAlignment.center,
-                      children: [
-                      pw.Text("From : "),
-                      pw.Text(" ${widget.invoice.source} ",
-                      style: pw.TextStyle(decoration: pw.TextDecoration.underline,fontWeight: pw.FontWeight.bold,letterSpacing: 0.56)
-                      ),
-                      pw.SizedBox(width: 50),
-                      pw.Text("To : "),
-                      pw.Text(" ${widget.invoice.destination} ",
-                      style: pw.TextStyle(decoration: pw.TextDecoration.underline,fontWeight: pw.FontWeight.bold,letterSpacing: 0.56)
-                      
-                      )
-                    ]),
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text("From : "),
+                          pw.Text(" ${widget.invoice.source} ",
+                              style: pw.TextStyle(
+                                  decoration: pw.TextDecoration.underline,
+                                  fontWeight: pw.FontWeight.bold,
+                                  letterSpacing: 0.56)),
+                          pw.SizedBox(width: 50),
+                          pw.Text("To : "),
+                          pw.Text(" ${widget.invoice.destination} ",
+                              style: pw.TextStyle(
+                                  decoration: pw.TextDecoration.underline,
+                                  fontWeight: pw.FontWeight.bold,
+                                  letterSpacing: 0.56))
+                        ]),
                     pw.SizedBox(height: 10),
                     table,
                     pw.SizedBox(height: 10),
                     pw.Row(
-                        mainAxisAlignment: pw.MainAxisAlignment.end,
-                        children: [amountTable]),
-
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Row(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                  "Amount (in word) : ",
+                                ),
+                                pw.Container(
+                                  width: 220,
+                                  child: pw.Text(
+                                      converter.convertAmountToWords(
+                                          widget.invoice.getRideTotal() -
+                                              widget.invoice.advance,
+                                          ignoreDecimal: false),
+                                      style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold)),
+                                ),
+                              ]),
+                          amountTable
+                        ]),
                     pw.SizedBox(height: 10),
- 
-
-  pw.Row(
-    mainAxisAlignment: pw.MainAxisAlignment.end,
-    children: [
-         pw.Text(
-                      'FOR VISHAL ROADLINES',
-                      style: pw.TextStyle(color: PdfColors.red,letterSpacing: .45,fontSize: 12,fontWeight: pw.FontWeight.bold)
+                    pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Text('GSTIN : 27ACGPY8550P1ZJ',
+                              style: pw.TextStyle(
+                                  color: PdfColors.red,
+                                  letterSpacing: .45,
+                                  fontSize: 12,
+                                  fontWeight: pw.FontWeight.bold)),
+                          pw.Text('FOR VISHAL ROADLINES',
+                              style: pw.TextStyle(
+                                  color: PdfColors.red,
+                                  letterSpacing: .45,
+                                  fontSize: 12,
+                                  fontWeight: pw.FontWeight.bold)),
+                        ]),
+                    pw.SizedBox(height: 20),
+                    pw.Container(
+                      alignment: pw.Alignment.centerRight,
+                      width: double.infinity,
+                      child: pw.Text('Authorised Signatory',
+                          style: pw.TextStyle(
+                              fontSize: 8, fontWeight: pw.FontWeight.bold)),
                     ),
+                    pw.Container(
+                      alignment: pw.Alignment.centerLeft,
+                      width: double.infinity,
+                      child: pw.Text('Bank Details',
+                          style: pw.TextStyle(
+                              fontSize: 14, fontWeight: pw.FontWeight.bold)),
+                    ),
+                    pw.Divider(
+                      height: 2
+                    ),
+                    pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text('Account Name'),
+                                pw.Text('Account Number'),
+                                pw.Text('IFSC Code'),
+                              ]),
+                          pw.Column(children: [
+                            pw.Text(' : '),
+                            pw.Text(' : '),
+                            pw.Text(' : '),
+                          ]),
+                          pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text('VISHAL ROADLINES'),
+                                pw.Text('629601010050010'),
+                                pw.Text('UBIN0562963'),
+                              ]),
+                          pw.Row(children: [
+                            pw.Column(
+                                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                children: [
+                                  pw.Text('Bank Name'),
+                                  pw.Text('Branch'),
+                                ]),
+                            pw.Column(children: [
+                              pw.Text(' : '),
+                              pw.Text(' : '),
+                            ]),
+                            pw.Column(
+                                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                children: [
+                                  pw.Text('Union Bank Of India'),
+                                  pw.Text('Louiswadi Thane (W)'),
+                                ]),
+                          ])
+                        ]),
+                        pw.Container(
+                          width: double.infinity,
+                          alignment: pw.Alignment.centerLeft,
+                          child : 
+                                  pw.Text('Note : As per provision of GST services is payable by Consignee/Consignor on RCM basis'),
+                        )
 
-    ]
-
-  ),
-                 
-                    pw.SizedBox(height: 10),
-
-
-                   pw.Row(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: 
-                     
-                   [
-                      pw.Text("Amount (in word) : ",),
-
-
-                      pw.Container(
-                        width: 300,
-                        child:  pw.Text(converter.convertAmountToWords(widget.invoice.getRideTotal()-widget.invoice.advance,ignoreDecimal: false),style:  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      ),
-                    
-
-
-                   ]),
-
-                      
                   ]),
             ),
             pw.Positioned(
                 right: 0.0,
                 child: pw.Container(
                     child: pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.end,
-                      children: [
-                  pw.Text("Mob No. 9920833549"),
-                  pw.Text("9987198275"),
-                 
-                ])))
+                        crossAxisAlignment: pw.CrossAxisAlignment.end,
+                        children: [
+                      pw.Text("Mob No. 9920833549"),
+                      pw.Text("9987198275"),
+                    ])))
           ])),
     ));
 
     // File IO for PDF
     final appDocDir = await getApplicationDocumentsDirectory();
     final appDocPath = appDocDir.path;
-    final file = File('$appDocPath/document.pdf');
+    final file = File('$appDocPath/${widget.invoice.invoiceNo}.pdf');
     print('Save as file ${file.path} ...');
     await file.writeAsBytes(await pdf.save());
     await OpenFile.open(file.path);
