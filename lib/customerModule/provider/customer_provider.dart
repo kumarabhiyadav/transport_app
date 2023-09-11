@@ -39,7 +39,7 @@ class CustomerProvider with ChangeNotifier {
   searchCustomer(String query) async {
     customers = [];
     final response = await HttpService.postRequest(
-        url: domain + endPoints['fetchCustomers']!, body: {'query': query});
+        url: domain + endPoints['searchCustomer']!, body: {'query': query});
 
     if (response['success']) {
       // customers.add(Customer.jsonToRide(response['result']));
