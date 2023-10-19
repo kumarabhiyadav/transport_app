@@ -25,13 +25,13 @@ newPdf({required Invoice invoice}) async {
   ];
   List<List<String>> data = [];
 
-  for (int i = 0; i <= 18; i++) {
+  for (int i = 0; i <= 15; i++) {
     if (i < invoice.rides.length) {
       Ride ride = invoice.rides[i];
       List<String> temp = [];
       temp.add(ride.truckNumber);
       temp.add(ride.lrNo);
-      temp.add(DateFormat('dd-MM-yyyy').format(ride.date));
+      temp.add(DateFormat('dd-MM-yy').format(ride.date));
       temp.add(ride.rate.toStringAsFixed(2));
       temp.add(ride.quantity.toStringAsFixed(2));
       temp.add(
@@ -73,7 +73,7 @@ newPdf({required Invoice invoice}) async {
   final tableRows = data.map((row) {
     return row.asMap().entries.map((cell) {
       return pw.Container(
-        height: 15,
+        height: 18,
         width: getWidthForColumnContent(cell.key),
         padding: const pw.EdgeInsets.symmetric(horizontal: 4, vertical: 0),
         alignment: pw.Alignment.center,
@@ -195,21 +195,24 @@ newPdf({required Invoice invoice}) async {
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Container(
-                          width: 300,
-                          child: pw.RichText(
-                            text: pw.TextSpan(
-                                text: 'M/s ',
-                                style: const pw.TextStyle(fontSize: 12),
+                            
+                           child: pw.Row(
+                            mainAxisAlignment: pw.MainAxisAlignment.start,
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [pw.Text('M/s'),pw.Container(
+                                                        width: 280,
+                                                        padding:  const pw.EdgeInsets.symmetric(horizontal: 4),
+
+                              child :pw.Column(
+                                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                mainAxisAlignment: pw.MainAxisAlignment.start,
                                 children: [
-                                  pw.TextSpan(
-                                      text:
-                                          "${invoice.customer.companyName.toUpperCase()} \n\t\t\t\t ${invoice.customer.address}",
-                                      style: pw.TextStyle(
-                                          decorationStyle:
-                                              pw.TextDecorationStyle.solid,
-                                          fontWeight: pw.FontWeight.bold))
-                                ]),
-                          ),
+                                pw.Text(invoice.customer.companyName,style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                                pw.Container(
+                                  height: 20,
+                                  child:pw.FittedBox(
+                                  child:pw.Text(invoice.customer.address,style: pw.TextStyle(fontWeight: pw.FontWeight.bold))))
+                                ]))])
                         ),
                         pw.Container(
                             padding: const pw.EdgeInsets.symmetric(
