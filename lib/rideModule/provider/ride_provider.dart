@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:transport_app/api.dart';
-import 'package:transport_app/common_functions.dart';
 import 'package:transport_app/rideModule/model/ride_model.dart';
 import 'package:transport_app/services/http_service.dart';
 

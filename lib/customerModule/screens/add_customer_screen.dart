@@ -34,7 +34,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     if (response != null) {
       Navigator.pop(context);
     } else {
-      print("Error");
+      // print("Error");
     }
   }
 

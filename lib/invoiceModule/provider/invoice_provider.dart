@@ -27,8 +27,7 @@ class InvoiceProvider with ChangeNotifier {
           'rides':
               jsonEncode(invoice.rides.map((e) => Ride.rideToJson(e)).toList()),
         });
-
-    // print(response);
+    return response;
   }
 
   fetchInvoices() async {

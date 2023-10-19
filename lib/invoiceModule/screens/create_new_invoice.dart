@@ -14,7 +14,6 @@ import 'package:transport_app/customerModule/model/customer.dart';
 import 'package:transport_app/customerModule/provider/customer_provider.dart';
 import 'package:transport_app/invoiceModule/models/invoice.dart';
 import 'package:transport_app/invoiceModule/provider/invoice_provider.dart';
-import 'package:transport_app/invoiceModule/templates/vishal_template.dart';
 import 'package:transport_app/rideModule/screens/add_new_ride_screen.dart';
 import 'package:transport_app/rideModule/model/ride_model.dart';
 
@@ -57,8 +56,6 @@ class _CreateNewInvoiceState extends State<CreateNewInvoice> {
     if (notValidate()) {
       return;
     } else {
-      // generatePDF();
-
       setState(() {
         isLoading = true;
       });

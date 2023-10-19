@@ -19,7 +19,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     setState(() {
       isLoading = true;
     });
-    Provider.of<InvoiceProvider>(context, listen: false).fetchInvoices();
+    await Provider.of<InvoiceProvider>(context, listen: false).fetchInvoices();
     setState(() {
       isLoading = false;
     });
@@ -48,7 +48,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
           title: const Text("Invoices"),
           elevation: 0,
         ),
-        endDrawer: Drawer(),
+        endDrawer: const Drawer(),
         body: isLoading
             ? const SpinKitFadingCube(
                 color: primaryColor,

@@ -74,7 +74,7 @@ class _AddNewRideScreenState extends State<AddNewRideScreen> {
           rides.add(ride);
           Navigator.pop(context, rides);
         } else {
-          print("Error");
+          // print("Error");
         }
         setState(() {
           isLoading = false;

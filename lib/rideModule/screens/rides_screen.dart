@@ -124,12 +124,12 @@ class _RideScreenState extends State<RideScreen> {
                 color: primaryColor,
               )
             : rides.isEmpty
-                ? SizedBox(
+                ? const SizedBox(
                     width: double.infinity,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children:  [
                         Icon(Icons.airport_shuttle_outlined),
                         Text("We don't have any ride")
                       ],

@@ -37,7 +37,6 @@ class _CustomerScreenState extends State<CustomerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dW = MediaQuery.of(context).size.width;
     final tS = MediaQuery.of(context).textScaleFactor;
     final List<Customer> customers =
         Provider.of<CustomerProvider>(context).customers;
@@ -53,7 +52,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
               : ListView.separated(
                   separatorBuilder: ((context, index) => const Divider()),
                   itemBuilder: ((context, index) => ListTile(
-                        leading: CircleAvatar(child: Icon(Icons.person)),
+                        leading: const CircleAvatar(child: Icon(Icons.person)),
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -77,10 +76,10 @@ class _CustomerScreenState extends State<CustomerScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                                onPressed: () {}, icon: Icon(Icons.phone)),
+                                onPressed: () {}, icon: const Icon(Icons.phone)),
                             IconButton(
                                 onPressed: () {},
-                                icon: Icon(Icons.delete_forever))
+                                icon: const Icon(Icons.delete_forever))
                           ],
                         ),
                       )),
