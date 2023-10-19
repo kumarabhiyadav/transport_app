@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:indian_currency_to_word/indian_currency_to_word.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -10,7 +10,18 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:transport_app/invoiceModule/models/invoice.dart';
 import 'package:transport_app/rideModule/model/ride_model.dart';
 
+
+
+loadLogo()async{
+  final ByteData bytes = await rootBundle.load('assets/images/vishalroadlinelogo.jpeg');
+    final Uint8List byteList = bytes.buffer.asUint8List();
+    return byteList;
+}
+
+
 newPdf({required Invoice invoice}) async {
+
+  final logo = await loadLogo();
   final converter = AmountToWords();
 
   final headers = [
@@ -86,11 +97,9 @@ newPdf({required Invoice invoice}) async {
             fit: pw.BoxFit.scaleDown,
             child: pw.ConstrainedBox(
               constraints: const pw.BoxConstraints(minWidth: 1, minHeight: 1),
-              child: pw.Text(
-                cell.value,
-                textAlign: pw.TextAlign.left,
-               style: const pw.TextStyle(fontSize: 10.00)
-              ),
+              child: pw.Text(cell.value,
+                  textAlign: pw.TextAlign.left,
+                  style: const pw.TextStyle(fontSize: 10.00)),
             ),
           ),
         ),
@@ -195,25 +204,36 @@ newPdf({required Invoice invoice}) async {
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Container(
-                            
-                           child: pw.Row(
-                            mainAxisAlignment: pw.MainAxisAlignment.start,
-                            crossAxisAlignment: pw.CrossAxisAlignment.start,
-                            children: [pw.Text('M/s'),pw.Container(
-                                                        width: 280,
-                                                        padding:  const pw.EdgeInsets.symmetric(horizontal: 4),
-
-                              child :pw.Column(
-                                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            child: pw.Row(
                                 mainAxisAlignment: pw.MainAxisAlignment.start,
+                                crossAxisAlignment: pw.CrossAxisAlignment.start,
                                 children: [
-                                pw.Text(invoice.customer.companyName,style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                                pw.Container(
-                                  height: 20,
-                                  child:pw.FittedBox(
-                                  child:pw.Text(invoice.customer.address,style: pw.TextStyle(fontWeight: pw.FontWeight.bold))))
-                                ]))])
-                        ),
+                              pw.Text('M/s'),
+                              pw.Container(
+                                  width: 280,
+                                  padding: const pw.EdgeInsets.symmetric(
+                                      horizontal: 4),
+                                  child: pw.Column(
+                                      crossAxisAlignment:
+                                          pw.CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          pw.MainAxisAlignment.start,
+                                      children: [
+                                        pw.Text(invoice.customer.companyName,
+                                            style: pw.TextStyle(
+                                                fontWeight:
+                                                    pw.FontWeight.bold)),
+                                        pw.Container(
+                                            height: 14,
+                                            child: pw.FittedBox(
+                                                fit: pw.BoxFit.scaleDown,
+                                                child: pw.Text(
+                                                    invoice.customer.address,
+                                                    style: pw.TextStyle(
+                                                        fontWeight: pw
+                                                            .FontWeight.bold))))
+                                      ]))
+                            ])),
                         pw.Container(
                             padding: const pw.EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
@@ -356,14 +376,31 @@ newPdf({required Invoice invoice}) async {
                 ]),
           ),
           pw.Positioned(
-              right: 0.0,
-              child: pw.Container(
-                  child: pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.end,
-                      children: [
+            right: 0.0,
+            child: pw.Container(
+              child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.end,
+                  children: [
                     pw.Text("Mob No. 9920833549"),
                     pw.Text("9987198275"),
-                  ])))
+                  ]),
+            ),
+          ),
+
+          pw.Positioned(
+            left: 0.0,
+            child: pw.Container(
+              child:  pw.Image(
+                
+                pw.MemoryImage(
+                  logo,
+                ),
+                fit: pw.BoxFit.contain,
+                height: 120,
+                width: 120
+                )
+            ),
+          )
         ])),
   ));
 
