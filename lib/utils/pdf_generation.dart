@@ -45,7 +45,10 @@ newPdf({required Invoice invoice}) async {
       temp.add(
           ride.detention! < 1.00 ? '' : ride.detention!.toStringAsFixed(2));
       temp.add(ride.particular.toUpperCase());
-      temp.add((ride.quantity * ride.rate).toStringAsFixed(2));
+      temp.add(((ride.quantity * ride.rate) + (ride.detention! > 0.00
+              ? ride.detention!
+              : 0.00))
+          .toStringAsFixed(2));
       data.add(temp);
     } else {
       List<String> temp = [];
@@ -223,15 +226,13 @@ newPdf({required Invoice invoice}) async {
                                         pw.Container(
                                           height: 12,
                                           // child: pw.FittedBox(
-                                            // fit: pw.BoxFit.scaleDown,
-                                            child: pw.Text(
-                                              invoice.customer.address,
-                                              style: pw.TextStyle(
+                                          // fit: pw.BoxFit.scaleDown,
+                                          child: pw.Text(
+                                            invoice.customer.address,
+                                            style: pw.TextStyle(
                                                 fontSize: 10,
-                                                  fontWeight:
-                                                      pw.FontWeight.bold),
-                                            ),
-                                          
+                                                fontWeight: pw.FontWeight.bold),
+                                          ),
                                         ),
                                       ]))
                             ])),
