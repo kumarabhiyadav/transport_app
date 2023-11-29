@@ -1,5 +1,5 @@
-const domain = "http://3.108.221.195:6001";
-// const domain = "https://transport-app-api.onrender.com";
+// const domain = "http://3.108.221.195:6001";
+const domain = "https://transport-app-api.onrender.com";
 
 // const domain = "http://127.0.0.1:6001";
 

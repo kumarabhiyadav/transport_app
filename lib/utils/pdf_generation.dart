@@ -10,17 +10,14 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:transport_app/invoiceModule/models/invoice.dart';
 import 'package:transport_app/rideModule/model/ride_model.dart';
 
-
-
-loadLogo()async{
-  final ByteData bytes = await rootBundle.load('assets/images/vishalroadlinelogo.jpeg');
-    final Uint8List byteList = bytes.buffer.asUint8List();
-    return byteList;
+loadLogo() async {
+  final ByteData bytes =
+      await rootBundle.load('assets/images/vishalroadlinelogo.jpeg');
+  final Uint8List byteList = bytes.buffer.asUint8List();
+  return byteList;
 }
 
-
 newPdf({required Invoice invoice}) async {
-
   final logo = await loadLogo();
   final converter = AmountToWords();
 
@@ -224,14 +221,18 @@ newPdf({required Invoice invoice}) async {
                                                 fontWeight:
                                                     pw.FontWeight.bold)),
                                         pw.Container(
-                                            height: 14,
-                                            child: pw.FittedBox(
-                                                fit: pw.BoxFit.scaleDown,
-                                                child: pw.Text(
-                                                    invoice.customer.address,
-                                                    style: pw.TextStyle(
-                                                        fontWeight: pw
-                                                            .FontWeight.bold))))
+                                          height: 12,
+                                          // child: pw.FittedBox(
+                                            // fit: pw.BoxFit.scaleDown,
+                                            child: pw.Text(
+                                              invoice.customer.address,
+                                              style: pw.TextStyle(
+                                                fontSize: 10,
+                                                  fontWeight:
+                                                      pw.FontWeight.bold),
+                                            ),
+                                          
+                                        ),
                                       ]))
                             ])),
                         pw.Container(
@@ -386,20 +387,16 @@ newPdf({required Invoice invoice}) async {
                   ]),
             ),
           ),
-
           pw.Positioned(
             left: 0.0,
             child: pw.Container(
-              child:  pw.Image(
-                
-                pw.MemoryImage(
-                  logo,
-                ),
-                fit: pw.BoxFit.contain,
-                height: 120,
-                width: 120
-                )
-            ),
+                child: pw.Image(
+                    pw.MemoryImage(
+                      logo,
+                    ),
+                    fit: pw.BoxFit.contain,
+                    height: 120,
+                    width: 120)),
           )
         ])),
   ));
